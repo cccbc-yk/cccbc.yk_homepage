@@ -14,3 +14,23 @@ document.getElementById("timeButton").innerText = h + ":" + m + ":" + s
 updateTime()
 
 setInterval(updateTime,1000)
+
+
+// ハンバーガーメニューのトグル
+const hamburger = document.getElementById("hamburger")
+
+hamburger.addEventListener("click",function(){
+
+hamburger.classList.toggle("active")
+
+})
+
+
+// メニューパネルのトグル
+const menuPanel = document.getElementById("menuPanel")
+
+hamburger.addEventListener("click",function(){
+
+menuPanel.classList.toggle("open")
+
+})

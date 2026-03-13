@@ -12,7 +12,7 @@ height:200vh;
 background:
 radial-gradient(circle at 20% 30%, #ffffff55 0%, transparent 40%),
 radial-gradient(circle at 80% 10%, #ffffff55 0%, transparent 40%),
-linear-gradient(180deg,#cfefff,#8fd6ff);
+linear-gradient(180deg,#9197d3,#000000);
 
 overflow-x:hidden;
 }
@@ -23,7 +23,7 @@ overflow-x:hidden;
 position:fixed;
 top:0;
 width:100%;
-height:130px;
+height:220px;
 
 }
 
@@ -33,9 +33,9 @@ height:130px;
 position:absolute;
 top:0;
 width:100%;
-height:130px;
+height:220px;
 
-fill:rgba(172, 76, 76, 0.35);
+fill:rgba(2, 11, 3, 0.35);
 
 backdrop-filter:blur(25px);
 }
@@ -52,7 +52,7 @@ height:100%;
 background:linear-gradient(
 120deg,
 transparent,
-rgba(255,255,255,0.6),
+rgba(255, 255, 255, 0.6),
 transparent
 );
 
@@ -81,9 +81,34 @@ padding:0 40px;
 
 /* 左 */
 .left{
+
 display:flex;
 align-items:center;
-gap:12px;
+gap:14px;
+
+padding:8px 16px;
+
+background:rgba(255,255,255,0.15);
+backdrop-filter:blur(20px);
+
+border-radius:40px;
+
+box-shadow:
+0 8px 25px rgba(0,0,0,0.2),
+inset 0 2px 5px rgba(255,255,255,0.6);
+
+transition:0.3s;
+
+}
+
+.left:hover{
+
+transform:translateY(-3px) scale(1.03);
+
+box-shadow:
+0 15px 35px rgba(0,0,0,0.3),
+inset 0 2px 8px rgba(255,255,255,0.7);
+
 }
 
 .avatar{
@@ -92,18 +117,35 @@ width:48px;
 height:48px;
 
 border-radius:50%;
+overflow:hidden;
 
-background:
-radial-gradient(circle at 30% 30%, #fff, #8fdcff);
+position:relative;
+
+animation:avatarFloat 5s ease-in-out infinite;
 
 box-shadow:
-0 6px 15px rgba(0,0,0,0.2),
-inset 0 3px 10px rgba(255,255,255,0.8);
+0 0 15px rgba(150,220,255,0.8);
 
+}
+
+
+.avatar img{
+width:100%;
+height:100%;
+object-fit:cover; /* 円にきれいに収める */
 }
 
 /* 中央 */
 .center{
+
+display:flex;
+gap:28px;
+
+margin-top: 50px;
+
+position:absolute;
+left:50%;
+transform:translateX(-50%);
 
 display:flex;
 gap:28px;
@@ -171,16 +213,147 @@ inset 0 5px 10px rgba(0,0,0,0.3);
 
 /* 右 */
 .right{
+display:flex;
+align-items:center;
 font-weight:bold;
-color:#0a4f70;
+gap: 20px;
 }
 
 .time-btn{
-margin-right:30px;
+margin-right:50px;
 font-size:30px;
 font-weight:bold;
-color:#004f7c;
+color:#563cc0;
 
 width:70px;
 
+
+}
+
+
+.menu-text{
+
+font-size:18px;
+font-weight:bold;
+
+background:linear-gradient(
+120deg,
+#8fd6ff,
+#ffffff,
+#8fd6ff
+);
+
+background-size:200%;   
+
+background-clip:text;
+
+-webkit-text-fill-color:transparent;
+
+animation:shineText 4s linear infinite;
+
+}
+
+@keyframes shineText{
+
+0%{background-position:0%}
+100%{background-position:200%}
+
+}
+
+
+.menu-text:hover{
+background:linear-gradient( 
+145deg,
+#8fd6ff,
+#cfefff
+);
+background-clip:text;
+-webkit-background-clip:text;
+-webkit-text-fill-color:transparent;
+}
+
+
+/* ハンバーガーボタン */
+
+.hamburger{
+
+width:35px;
+height:25px;
+
+display:flex;
+flex-direction:column;
+justify-content:space-between;
+
+cursor:pointer;
+
+}
+
+
+.hamburger img{
+
+width: 40px;
+height: 40px;
+cursor: pointer;
+
+transition:0.3s;
+
+}
+
+/* クリック時アニメーション */
+
+.hamburger.active img{
+transform:rotate(90deg) scale(1.1);
+}
+
+
+
+/* スライドメニュー */
+
+.menu-panel{
+
+position:fixed;
+top:0;
+right:-260px;
+
+width:260px;
+height:100vh;
+
+background:rgba(255,255,255,0.4);
+backdrop-filter:blur(20px);
+
+box-shadow:-5px 0 20px rgba(0,0,0,0.2);
+
+padding-top:120px;
+
+display:flex;
+flex-direction:column;
+gap:20px;
+
+transition:0.35s;
+
+}
+
+/* 開いた状態 */
+
+.menu-panel.open{
+right:0;
+}
+
+/* メニュー項目 */
+
+.menu-panel a{
+
+padding:12px 25px;
+
+font-size:18px;
+
+color:#0a4f70;
+text-decoration:none;
+
+border-radius:10px;
+
+}
+
+.menu-panel a:hover{
+background:rgba(255,255,255,0.6);
 }
