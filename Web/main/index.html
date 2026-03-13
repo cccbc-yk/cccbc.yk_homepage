@@ -1,13 +1,81 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ja">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="style/style.css">
+
+<title>Frutiger Aero Navbar</title>
+
+<style>
+
+</style>
 </head>
-<body> 
-    <h1>Welcome to the Main Page</h1>
-    <p>This is the main page of the website.</p>
-    
+
+<body>
+
+<div class="nav-wrapper">
+
+<svg class="wave" viewBox="0 0 1440 180" preserveAspectRatio="none">
+
+<path d="
+M0,60
+C200,40 350,40 520,90
+C650,140 800,140 920,90
+C1100,40 1250,40 1440,60
+L1440,0
+L0,0
+Z">
+</path>
+
+</svg>
+
+<nav class="navbar">
+
+<div class="left">
+<div class="avatar"></div>
+<span>1200</span>
+</div>
+
+<div class="center">
+
+<div class="icon">🏠</div>
+<div class="icon">📷</div>
+<div class="icon">💬</div>
+<div class="icon">✉️</div>
+
+</div>
+
+<div class="right">
+    <div class="time-btn" id="timeButton">
+        00:00
+    </div>
+</div>
+
+</nav>
+
+</div>
+
+<script>
+
+function updateTime(){
+
+const now = new Date()
+
+let h = now.getHours().toString().padStart(2,'0')
+let m = now.getMinutes().toString().padStart(2,'0')
+
+document.getElementById("timeButton").innerText = h + ":" + m
+
+}
+
+updateTime()
+
+setInterval(updateTime,1000)
+
+</script>
+
 </body>
+
+<script src="script/app.js"></script>
 </html>
