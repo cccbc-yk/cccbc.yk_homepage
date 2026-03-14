@@ -1,13 +1,391 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ja">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>コンピュータ同好会 - CCCBC ホームページ</title>
+    <!-- Google Fonts: M PLUS Rounded 1c -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;700&display=swap" rel="stylesheet">
+    <!-- Three.js for 3D Logo -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <style>
+        :root {
+            --accent: #00d2ff;
+            --bg-site: #fdfdfd;
+            --glass-glow: rgba(0, 210, 255, 0.5);
+        }
+
+
+
+        /* --- Side Pillarboxes (デジタルとアナログの境目) --- */
+        .side-frame {
+            position: fixed;
+            top: 0;
+            width: calc((100vw - 1500px) / 2);
+            height: 100vh;
+            /* 記録中の漆黒の帯 */
+            background: #050505;
+            background-image: linear-gradient(
+                rgba(18, 16, 16, 0) 50%, 
+                rgba(0, 0, 0, 0.25) 50%
+            ), linear-gradient(
+                90deg, 
+                rgba(255, 0, 0, 0.02), 
+                rgba(0, 255, 0, 0.01), 
+                rgba(0, 0, 255, 0.02)
+            );
+            background-size: 100% 2px, 3px 100%;
+            z-index: 2000; /* 全ての要素（ヘッダー含む）より上に置くことで「枠」にする */
+            pointer-events: none;
+        }
+
+        .side-frame-left { 
+            left: 0; 
+            border-right: 1px solid rgba(255, 255, 255, 0.15);
+            box-shadow: 10px 0 30px rgba(0,0,0,0.8);
+        }
+        .side-frame-right { 
+            right: 0; 
+            border-left: 1px solid rgba(255, 255, 255, 0.15);
+            box-shadow: -10px 0 30px rgba(0,0,0,0.8);
+        }
+
+        /* 画面が狭いときは枠を消す */
+        @media (max-width: 1500px) {
+            .side-frame { display: none; }
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: "M PLUS Rounded 1c", sans-serif;
+            color: #333;
+            overflow-x: hidden;
+            /* 枠に合わせて1500px幅に固定したWindows XP Bliss */
+            background-color: #000; /* 枠の外は完全な黒 */
+            background-image: url("assets/webp/Bliss_(Windows_XP).webp");
+            background-size: 1500px auto;
+            background-position: center bottom;
+            background-attachment: fixed;
+            background-repeat: no-repeat;
+        }
+
+        /* 背景が明るい画像の場合に備え、オーバーレイで可読性を確保 */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: saturate(1.2);
+            z-index: -1;
+        }
+
+        /* --- Floating Menu Bar Style (Responsive) --- */
+        #header-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 120px;
+            display: flex;
+            justify-content: center;
+            z-index: 1000;
+            filter: drop-shadow(0 15px 40px rgba(0, 50, 100, 0.25));
+        }
+
+        #canvas-wrap {
+            position: relative;
+            width: 1500px;
+            height: 120px;
+            pointer-events: auto;
+            flex-shrink: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* --- ヘッダー専用のパーツ画像 --- */
+        #header-bg-part {
+            position: absolute;
+            top: -20px;
+            /* 以前の座標再現 */
+            left: 0;
+            width: 1500px;
+            height: 450px;
+            background-image: url("assets/webp/frutiger_aero_design (8).webp");
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center top;
+            z-index: -1;
+            pointer-events: none;
+            filter: drop-shadow(0 20px 50px rgba(0, 0, 0, 0.1));
+        }
+
+        #headerCanvas {
+            position: relative;
+            width: 1500px;
+            height: 450px;
+            margin-top: -150px;
+            /* キャンバスの描画位置合わせ */
+            display: block;
+            z-index: 1;
+        }
+
+        /* --- Access & Time Overlays (Menu alignment) --- */
+        /* --- Stat Box Base Styling --- */
+        .info-box {
+            position: absolute;
+            color: #fff;
+            text-align: center;
+            text-shadow: 0 0 8px rgba(0, 210, 255, 0.8), 0 0 15px rgba(0, 210, 255, 0.4);
+            pointer-events: none;
+            transform: translateX(-50%);
+            /* 座標を要素の中央にする */
+        }
+
+        /* 個別配置 */
+        #box-time {
+            top: 25px;
+            left: 555px;
+        }
+
+        #box-network {
+            top: 90px;
+            left: 70px;
+        }
+
+        #box-access {
+            top: 30px;
+            left: 910px;
+        }
+
+        .label {
+            display: block;
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            opacity: 0.8;
+            font-weight: 700;
+            margin-bottom: 2px;
+        }
+
+        .value {
+            font-size: 1.0rem;
+            font-weight: 700;
+            letter-spacing: 0.05em;
+        }
+
+        /* --- Debug Tooltip --- */
+        #debug-mouse {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: rgba(0, 0, 0, 0.8);
+            color: #0f0;
+            padding: 5px 10px;
+            font-family: monospace;
+            border-radius: 4px;
+            z-index: 9999;
+            font-size: 12px;
+            pointer-events: none;
+            border: 1px solid #0f0;
+        }
+
+        /* --- Main Content --- */
+        main {
+            padding-top: 15vh;
+            max-width: 900px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .hero-section {
+            padding: 100px 20px;
+        }
+
+        h1 {
+            font-size: 3.8rem;
+            color: #0056b3;
+            margin-bottom: 20px;
+            text-shadow: 0 4px 10px rgba(255, 255, 255, 0.8), 0 0 40px rgba(0, 210, 255, 0.3);
+            letter-spacing: -0.02em;
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.25);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            backdrop-filter: blur(20px) saturate(1.5);
+            padding: 50px;
+            border-radius: 40px;
+            box-shadow:
+                0 20px 50px rgba(0, 30, 100, 0.1),
+                inset 0 0 20px rgba(255, 255, 255, 0.2);
+            margin-top: 50px;
+            color: #002b5c;
+            line-height: 1.8;
+            font-size: 1.1rem;
+        }
+
+        /* --- 3D Logo Container --- */
+        #logo-3d-container {
+            width: 300px;
+            height: 300px;
+            margin: 0 auto;
+            position: relative;
+            cursor: pointer;
+            filter: drop-shadow(0 20px 40px rgba(0, 0, 0, 0.3));
+        }
+
+        /* --- Antenna Styles --- */
+        .sig-bar {
+            fill: rgba(255, 255, 255, 0.2);
+        }
+
+        .sig-bar.active {
+            fill: #fff;
+            filter: drop-shadow(0 0 5px rgba(0, 210, 255, 0.8));
+        }
+
+        .sig-bar.hidden {
+            fill: rgba(255, 255, 255, 0.2);
+            filter: none;
+        }
+
+        #antenna-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 38px;
+        }
+    </style>
 </head>
-<body> 
-    <h1>Welcome to the Main Page</h1>
-    <p>This is the main page of the website.</p>
-    
+
+<body>
+    <div class="side-frame side-frame-left"></div>
+    <div class="side-frame side-frame-right"></div>
+
+    <div id="header-container">
+        <div id="canvas-wrap">
+            <div id="header-bg-part"></div>
+            <canvas id="headerCanvas"></canvas>
+            <div id="box-time" class="info-box">
+                <span class="label">Time</span>
+                <span id="currentTime" class="value">00:00:00</span>
+            </div>
+
+            <div id="box-network" class="info-box">
+                <span class="label">Network</span>
+                <div id="antenna-container">
+                    <svg width="40" height="26" viewBox="0 0 50 30">
+                        <path d="M 8 28 V 10 M 8 10 L 4 5 H 12 Z" stroke="white" stroke-width="2" fill="none" />
+                        <rect class="sig-bar active" x="18" y="22" width="4" height="6" rx="1" />
+                        <rect class="sig-bar active" x="26" y="15" width="4" height="13" rx="1" />
+                        <rect class="sig-bar active" x="34" y="9" width="4" height="19" rx="1" />
+                        <rect class="sig-bar active" id="bar-4" x="42" y="3" width="4" height="25" rx="1" />
+                    </svg>
+                </div>
+            </div>
+
+            <div id="box-access" class="info-box">
+                <span class="label">Access</span>
+                <span id="accessCount" class="value">10,841</span>
+            </div>
+        </div>
+    </div>
+
+    <main>
+        <section class="hero-section">
+            <div id="logo-3d-container"></div>
+            <h1>コンピュータの世界へ。</h1>
+            <div class="glass-card">
+                <p>このページは Frutiger Aero ジェネレーターによって生成されたリッチなヘッダーを使用しています。</p>
+                <p>上のヘッダーにマウスを乗せると、アクリル素材の質感がより鮮明に確認できます。</p>
+            </div>
+        </section>
+    </main>
+
+    <div id="debug-mouse">X: 0, Y: 0</div>
+
+    <script src="assets/aero_engine.js"></script>
+    <script src="assets/logo_3d.js"></script>
+    <script>
+        // デバッグ用マウス座標表示
+        const debugMouse = document.getElementById('debug-mouse');
+        const canvasWrap = document.getElementById('canvas-wrap');
+
+        window.addEventListener('mousemove', (e) => {
+            // ヘッダー（canvas-wrap）内での相対座標を計算
+            const rect = canvasWrap.getBoundingClientRect();
+            const relX = Math.round(e.clientX - rect.left);
+            const relY = Math.round(e.clientY - rect.top);
+
+            debugMouse.innerHTML = `Window X: ${e.clientX}, Y: ${e.clientY}<br>Header X: ${relX}, Y: ${relY}`;
+        });
+
+        const canvas = document.getElementById('headerCanvas');
+        const ctx = canvas.getContext('2d', { willReadFrequently: true });
+
+        // キャンバスサイズを1500px固定に（背景の動きと同期）
+        function resizeCanvas() {
+            const baseWidth = 1500;
+            const baseHeight = 450;
+            canvas.width = baseWidth * RESOLUTION_SCALE;
+            canvas.height = baseHeight * RESOLUTION_SCALE;
+            runRender();
+        }
+
+        // 初期設定
+        async function init() {
+
+            resizeCanvas();
+        }
+
+        window.addEventListener('resize', resizeCanvas);
+
+        function runRender() {
+            if (!userSvg) return;
+            render(ctx, canvas.width, canvas.height);
+            applyRoughCut(ctx, canvas.width, canvas.height);
+        }
+
+        // 時刻・アクセスの更新
+        function updateStats() {
+            const now = new Date();
+            document.getElementById('currentTime').textContent =
+                now.getHours().toString().padStart(2, '0') + ':' +
+                now.getMinutes().toString().padStart(2, '0') + ':' +
+                now.getSeconds().toString().padStart(2, '0');
+
+            if (Math.random() > 0.98) {
+                const el = document.getElementById('accessCount');
+                let count = parseInt(el.textContent.replace(/,/g, ''));
+                el.textContent = (count + 1).toLocaleString();
+            }
+
+            // アンテナの演出: 基本4本、たまに3本 (パキッと切り替え)
+            const bar4 = document.getElementById('bar-4');
+            if (Math.random() > 0.9) {
+                if (Math.random() > 0.3) {
+                    bar4.classList.add('active');
+                    bar4.classList.remove('hidden');
+                } else {
+                    bar4.classList.remove('active');
+                    bar4.classList.add('hidden');
+                }
+            }
+        }
+
+        setInterval(updateStats, 1000);
+        updateStats();
+
+        init();
+    </script>
 </body>
+
 </html>
