@@ -68,7 +68,7 @@
 
             // 像の形状を抽出 (簡易的な矩形ベースの近似 or 四角形押し出し)
             // 本格的なパス抽出は複雑なため、ピクセルの塊をShapeとして構築
-            const shape = createShapeFromAlpha(imageData, 2); // 2pxステップでサンプリング
+            const shape = createShapeFromAlpha(imageData);
 
             const extrudeSettings = {
                 depth: EXTRUDE_DEPTH,
