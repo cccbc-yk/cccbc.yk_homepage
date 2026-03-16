@@ -96,7 +96,7 @@
             height: 120px;
             display: flex;
             justify-content: center;
-            z-index: 1000;
+            z-index: 1;
             filter: drop-shadow(0 15px 40px rgba(0, 50, 100, 0.25));
         }
 
@@ -130,19 +130,79 @@
 
         /* --- 地球メニュー画像 --- */
         #header-earth-part {
-            position: absolute;
+            position: fixed;
             top: 10px;
-            left: 941px;
+            left: calc(max(0px, 50vw - 750px) + min(100vw, 1500px) * 0.85);
             width: 140px;
             height: 60px;
             background-image: url("Web/main/assets/webp/menu_earth.webp");
             background-size: contain;
             background-repeat: no-repeat;
-            z-index: 2;
+            z-index: 3;
             pointer-events: auto;
             cursor: pointer;
             filter: drop-shadow(0 0 10px rgba(0, 210, 255, 0.4));
             transition: transform 0.3s ease, filter 0.3s ease;
+        }
+
+        /* クリック時アニメーション */
+        #header-earth-part.active {
+            transform: scale(1.1) rotate(10deg);
+            filter: drop-shadow(0 0 20px rgba(0, 210, 255, 1));
+        }
+
+
+
+        /* スライドメニュー */
+
+        .menu-panel {
+
+            position: fixed;
+            top: 0;
+            right: -260;
+
+            width: 0px;
+            height: 100vh;
+
+            background: rgba(255, 255, 255, 0.4);
+            backdrop-filter: blur(20px);
+
+            box-shadow: -5px 0 20px rgba(0, 0, 0, 0.2);
+
+            padding-top: 120px;
+
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+
+            transition: 0.35s;
+
+        }
+
+        /* 開いた状態 */
+
+        .menu-panel.open {
+            right: calc(max((100vw - 1500px) /2, 0px));
+            width: 260px;
+        }
+
+        /* メニュー項目 */
+
+        .menu-panel a {
+
+            padding: 12px 25px;
+
+            font-size: 18px;
+
+            color: #0a4f70;
+            text-decoration: none;
+
+            border-radius: 10px;
+
+        }
+
+        .menu-panel a:hover {
+            background: rgba(255, 255, 255, 0.6);
         }
 
         #header-earth-part:hover {
@@ -333,11 +393,11 @@
 <body>
     <div class="side-frame side-frame-left"></div>
     <div class="side-frame side-frame-right"></div>
-
+    <div id="header-earth-part"></div>
     <div id="header-container">
         <div id="canvas-wrap">
             <div id="header-bg-part"></div>
-            <div id="header-earth-part"></div>
+
             <canvas id="headerCanvas"></canvas>
             <div id="box-time" class="info-box">
                 <span class="label">Time</span>
@@ -357,12 +417,29 @@
                 </div>
             </div>
 
+
+
             <div id="box-access" class="info-box">
                 <span class="label">Access</span>
                 <span id="accessCount" class="value">10,841</span>
             </div>
         </div>
     </div>
+
+    <div class="menu-panel" id="menuPanel">
+
+        <a href="#">ホーム</a>
+        <a href="#">同好会紹介</a>
+        <a href="#">部員紹介</a>
+        <a href="#">部員作品一覧</a>
+        <a href="#">活動実績</a>
+        <a href="#">リリースノート</a>
+        <a href="#">募集要項</a>
+        <a href="#">同好会掲示板</a>
+        <a href="#">サイト設定</a>
+
+    </div>
+
 
     <main>
         <section class="hero-section">
@@ -424,6 +501,23 @@
         // Canvas要素が未使用の場合は非表示にする（あるいは削除）
         const headerCanvas = document.getElementById('headerCanvas');
         if (headerCanvas) headerCanvas.style.display = 'none';
+
+        // 地球メニューの開閉
+        const earthBtn = document.getElementById('header-earth-part');
+        const menuPanel = document.getElementById('menuPanel');
+
+        earthBtn.addEventListener('click', () => {
+            menuPanel.classList.toggle('open');
+            earthBtn.classList.toggle('active');
+        });
+
+        // パネルの外をクリックしたら閉じる（オプション）
+        document.addEventListener('click', (e) => {
+            if (!earthBtn.contains(e.target) && !menuPanel.contains(e.target)) {
+                menuPanel.classList.remove('open');
+                earthBtn.classList.remove('active');
+            }
+        });
     </script>
 </body>
 
