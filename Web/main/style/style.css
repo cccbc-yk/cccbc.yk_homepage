@@ -219,6 +219,42 @@ font-weight:bold;
 gap: 20px;
 }
 
+/* 右（ハンバーガー＋メニュー） */
+
+.right{
+
+display:flex;
+align-items:center;
+gap:16px;
+
+padding:8px 18px;
+
+background:rgba(255,255,255,0.25);
+
+border-radius:40px;
+
+backdrop-filter:blur(20px);
+
+box-shadow:
+0 10px 30px rgba(0,0,0,0.2),
+inset 0 2px 6px rgba(255,255,255,0.7);
+
+transition:0.3s;
+
+}
+
+/* ホバーで少し浮く */
+
+.right:hover{
+
+transform:translateY(-3px) scale(1.03);
+
+box-shadow:
+0 15px 35px rgba(0,0,0,0.3),
+inset 0 2px 8px rgba(255,255,255,0.8);
+
+}
+
 .time-btn{
 margin-right:50px;
 font-size:30px;
@@ -356,4 +392,151 @@ border-radius:10px;
 
 .menu-panel a:hover{
 background:rgba(255,255,255,0.6);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* =========================
+   スマホ対応
+========================= */
+
+@media (max-width: 768px){
+
+/* ナビ高さ */
+.nav-wrapper{
+height:140px;
+}
+
+/* 波 */
+.wave{
+height:140px;
+}
+
+/* ナビ全体余白 */
+.navbar{
+padding:0 15px;
+top:10px;
+}
+
+/* 左ロゴ */
+.left{
+gap:8px;
+padding:6px 12px;
+}
+
+.avatar{
+width:38px;
+height:38px;
+}
+
+/* 中央アイコン */
+.center{
+
+margin-top:30px;
+
+gap:15px;
+
+padding:8px 15px;
+
+}
+
+/* アイコンサイズ */
+.icon{
+
+width:42px;
+height:42px;
+
+font-size:18px;
+
+}
+
+/* 右 */
+.right{
+gap:10px;
+}
+
+/* 時計 */
+.time-btn{
+
+font-size:18px;
+width:auto;
+margin-right:10px;
+
+}
+
+/* メニュー文字 */
+.menu-text{
+
+font-size:14px;
+
+}
+
+/* ハンバーガー */
+.hamburger img{
+
+width:32px;
+height:32px;
+
+}
+
+/* スライドメニュー */
+.menu-panel{
+
+width:220px;
+
+}
+
+}
+
+/* =========================
+   小さいスマホ
+========================= */
+
+@media (max-width:480px){
+
+.center{
+
+gap:10px;
+padding:6px 10px;
+
+}
+
+.icon{
+
+width:36px;
+height:36px;
+
+font-size:16px;
+
+}
+
+.menu-text{
+display:none;
+}
+
+.time-btn{
+display:none;
+}
+
 }
