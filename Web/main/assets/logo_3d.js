@@ -46,9 +46,17 @@
         loadLogo();
         animate();
 
-        // イベント
-        container.addEventListener('mouseenter', () => isHovered = true);
+        // イベント: 触れた瞬間に強力な加速(キック)を入れる
+        container.addEventListener('mouseenter', () => {
+            isHovered = true;
+            currentVelocity += 0.6; // 強めに加速
+        });
         container.addEventListener('mouseleave', () => isHovered = false);
+
+        // クリックした際もさらに加速
+        container.addEventListener('mousedown', () => {
+            currentVelocity += 0.6;
+        });
     }
 
     // --- 2. ロゴの読み込みと3D化 ---
@@ -212,17 +220,16 @@
         requestAnimationFrame(animate);
 
         if (logoMesh) {
-            // 基本の加速度
-            currentVelocity += baseAcceleration;
+            // 摩擦による減速 (0.98にして長く回るように)
+            currentVelocity *= 0.98;
 
-            // マウスオーバー時は減速（摩擦）を追加
-            if (isHovered) {
-                currentVelocity *= 0.95; // 5%ずつ減速
-            } else {
-                // 通常時の速度制限
-                if (currentVelocity > 0.04) currentVelocity = 0.04;
-                if (currentVelocity < 0.01) currentVelocity = 0.01;
+            // 最低速度の維持 (アイドリング速度を少しアップ)
+            if (currentVelocity < 0.02) {
+                currentVelocity += baseAcceleration;
             }
+
+            // 最高速度の制限
+            if (currentVelocity > 0.5) currentVelocity = 0.5;
 
             logoMesh.rotation.y += currentVelocity;
 
