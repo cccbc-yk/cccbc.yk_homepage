@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>コンピュータ同好会 - CCCBC ホームページ</title>
+    <!-- Google Fonts: M PLUS Rounded 1c -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;700&display=swap" rel="stylesheet">
+    <!-- Three.js for 3D Logo -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <style>
+        :root {
+            --accent: #00d2ff;
+            --bg-site: #fdfdfd;
+            --glass-glow: rgba(0, 210, 255, 0.5);
+        }
+
+
+
+        /* --- Side Pillarboxes (デジタルとアナログの境目) --- */
+        .side-frame {
+            position: fixed;
+            top: 0;
+            width: calc((100vw - 1500px) / 2);
+            height: 100vh;
+            /* 記録中の漆黒の帯 */
+            background: #050505;
+            background-image: linear-gradient(rgba(18, 16, 16, 0) 50%,
+                    rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg,
+                    rgba(255, 0, 0, 0.02),
+                    rgba(0, 255, 0, 0.01),
+                    rgba(0, 0, 255, 0.02));
+            background-size: 100% 2px, 3px 100%;
+            z-index: 2000;
+            /* 全ての要素（ヘッダー含む）より上に置くことで「枠」にする */
+            pointer-events: none;
+        }
+
+        .side-frame-left {
+            left: 0;
+            border-right: 1px solid rgba(255, 255, 255, 0.15);
+            box-shadow: 10px 0 30px rgba(0, 0, 0, 0.8);
+        }
+
+        .side-frame-right {
+            right: 0;
+            border-left: 1px solid rgba(255, 255, 255, 0.15);
+            box-shadow: -10px 0 30px rgba(0, 0, 0, 0.8);
+        }
+
+        /* 画面が狭いときは枠を消す */
+        @media (max-width: 1500px) {
+            .side-frame {
+                display: none;
+            }
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: "M PLUS Rounded 1c", sans-serif;
+            color: #333;
+            overflow-x: hidden;
+            /* 枠に合わせて1500px幅に固定したWindows XP Bliss */
+            background-color: #000;
+            /* 枠の外は完全な黒 */
+            background-image: url("assets/webp/Bliss_(Windows_XP).webp");
+            background-size: 1500px auto;
+            background-position: center bottom;
+            background-attachment: fixed;
+            background-repeat: no-repeat;
+        }
+
+        /* 背景が明るい画像の場合に備え、オーバーレイで可読性を確保 */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: saturate(1.2);
+            z-index: -1;
+        }
+
+        /* --- Floating Menu Bar Style (Responsive) --- */
+        #header-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 120px;
+            display: flex;
+            justify-content: center;
+            z-index: 1000;
+            filter: drop-shadow(0 15px 40px rgba(0, 50, 100, 0.25));
+        }
+
+        #canvas-wrap {
+            position: relative;
+            width: 1500px;
+            height: 120px;
+            pointer-events: auto;
+            flex-shrink: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* --- ヘッダー専用のパーツ画像 --- */
+        #header-bg-part {
+            position: absolute;
+            top: -20px;
+            /* 以前の座標再現 */
+            left: 0;
+            width: 1500px;
+            height: 450px;
+            background-image: url("assets/webp/frutiger_aero_design (8).webp");
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center top;
+            z-index: -1;
+            pointer-events: none;
+            filter: drop-shadow(0 20px 50px rgba(0, 0, 0, 0.1));
+        }
+
+        /* --- 地球メニュー画像 --- */
+        #header-earth-part {
+            position: absolute;
+            top: 10px;
+            left: 941px;
+            width: 140px;
+            height: 60px;
+            background-image: url("assets/webp/メニュー(地球).webp");
+            background-size: contain;
+            background-repeat: no-repeat;
+            z-index: 2;
+            pointer-events: auto;
+            cursor: pointer;
+            filter: drop-shadow(0 0 10px rgba(0, 210, 255, 0.4));
+            transition: transform 0.3s ease, filter 0.3s ease;
+        }
+
+        #header-earth-part:hover {
+            transform: scale(1.05);
+            filter: drop-shadow(0 0 15px rgba(0, 210, 255, 0.8));
+        }
+
+        #headerCanvas {
+            position: relative;
+            width: 1500px;
+            height: 450px;
+            margin-top: -150px;
+            /* キャンバスの描画位置合わせ */
+            display: block;
+            z-index: 1;
+        }
+
+        /* --- Access & Time Overlays (Menu alignment) --- */
+        /* --- Stat Box Base Styling --- */
+        .info-box {
+            position: absolute;
+            color: #fff;
+            text-align: center;
+            text-shadow: 0 0 8px rgba(0, 210, 255, 0.8), 0 0 15px rgba(0, 210, 255, 0.4);
+            pointer-events: none;
+            transform: translateX(-50%);
+            /* 座標を要素の中央にする */
+        }
+
+        /* 個別配置 */
+        #box-time {
+            top: 25px;
+            left: 555px;
+        }
+
+        #box-network {
+            top: 90px;
+            left: 70px;
+        }
+
+        #box-access {
+            top: 30px;
+            left: 910px;
+        }
+
+        .label {
+            display: block;
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            opacity: 0.8;
+            font-weight: 700;
+            margin-bottom: 2px;
+        }
+
+        .value {
+            font-size: 1.0rem;
+            font-weight: 700;
+            letter-spacing: 0.05em;
+        }
+
+        /* --- Main Content --- */
+        main {
+            padding-top: 15vh;
+            max-width: 900px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .hero-section {
+            padding: 100px 20px;
+        }
+
+        h1 {
+            font-size: 3.8rem;
+            color: #0056b3;
+            margin-bottom: 20px;
+            text-shadow: 0 4px 10px rgba(255, 255, 255, 0.8), 0 0 40px rgba(0, 210, 255, 0.3);
+            letter-spacing: -0.02em;
+        }
+
+
+        /* --- 3D Logo Container --- */
+        #logo-3d-container {
+            width: 300px;
+            height: 300px;
+            margin: 0 auto;
+            position: relative;
+            cursor: pointer;
+            filter: drop-shadow(0 20px 40px rgba(0, 0, 0, 0.3));
+        }
+
+        /* --- Antenna Styles --- */
+        .sig-bar {
+            fill: rgba(255, 255, 255, 0.2);
+        }
+
+        .sig-bar.active {
+            fill: #fff;
+            filter: drop-shadow(0 0 5px rgba(0, 210, 255, 0.8));
+        }
+
+        .sig-bar.hidden {
+            fill: rgba(255, 255, 255, 0.2);
+            filter: none;
+        }
+
+        #antenna-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 38px;
+        }
+
+        /* フルティガーエアロ風・すりガラスコンテンツボックス */
+        .aero-content-box {
+            width: 80%;
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 30px 40px;
+
+            /* すりガラス効果（魔法の1行） */
+            background: rgba(255, 255, 255, 0.4);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+
+            /* アクリルの厚みと丸み */
+            border-radius: 15px;
+            border-top: 2px solid rgba(255, 255, 255, 0.8);
+            /* 上からの光 */
+            border-left: 1px solid rgba(255, 255, 255, 0.5);
+            border-bottom: 1px solid rgba(0, 50, 100, 0.2);
+            /* 下の影 */
+            border-right: 1px solid rgba(0, 50, 100, 0.2);
+
+            /* 空間に浮いているようなドロップシャドウ */
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15),
+                inset 0 0 20px rgba(255, 255, 255, 0.5);
+            /* 内側の反射 */
+
+            /* テキストのスタイル（当時のシステムフォント感を出す） */
+            font-family: "Meiryo", "メイリオ", "MS P Gothic", sans-serif;
+            color: #003366;
+            /* 濃いブルーで視認性アップ */
+            text-align: center;
+            line-height: 1.8;
+        }
+
+        .aero-subtitle {
+            font-size: 0.9rem;
+            font-weight: bold;
+            color: #0055aa;
+            margin-bottom: 20px;
+            letter-spacing: 1px;
+        }
+
+        .aero-text {
+            font-size: 1.05rem;
+            margin-bottom: 30px;
+            text-align: justify;
+            text-justify: inter-ideograph;
+        }
+
+        .aero-contact {
+            font-size: 1rem;
+            font-weight: bold;
+            background: rgba(0, 100, 200, 0.1);
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.6);
+        }
+
+        .aero-link {
+            color: #0066cc;
+            text-decoration: underline;
+            font-size: 1.2rem;
+        }
+
+        .aero-link:hover {
+            color: #0099ff;
+            text-shadow: 0 0 8px rgba(0, 150, 255, 0.8);
+            /* ホバーで光る！ */
+        }
+    </style>
+</head>
+
+
+<body>
+    <div class="side-frame side-frame-left"></div>
+    <div class="side-frame side-frame-right"></div>
+
+    <div id="header-container">
+        <div id="canvas-wrap">
+            <div id="header-bg-part"></div>
+            <div id="header-earth-part"></div>
+            <canvas id="headerCanvas"></canvas>
+            <div id="box-time" class="info-box">
+                <span class="label">Time</span>
+                <span id="currentTime" class="value">00:00:00</span>
+            </div>
+
+            <div id="box-network" class="info-box">
+                <span class="label">Network</span>
+                <div id="antenna-container">
+                    <svg width="40" height="26" viewBox="0 0 50 30">
+                        <path d="M 8 28 V 10 M 8 10 L 4 5 H 12 Z" stroke="white" stroke-width="2" fill="none" />
+                        <rect class="sig-bar active" x="18" y="22" width="4" height="6" rx="1" />
+                        <rect class="sig-bar active" x="26" y="15" width="4" height="13" rx="1" />
+                        <rect class="sig-bar active" x="34" y="9" width="4" height="19" rx="1" />
+                        <rect class="sig-bar active" id="bar-4" x="42" y="3" width="4" height="25" rx="1" />
+                    </svg>
+                </div>
+            </div>
+
+            <div id="box-access" class="info-box">
+                <span class="label">Access</span>
+                <span id="accessCount" class="value">10,841</span>
+            </div>
+        </div>
+    </div>
+
+    <main>
+        <section class="hero-section">
+            <div id="logo-3d-container"></div>
+            <h1>コンピュータの世界へ。</h1>
+            <div class="aero-content-box">
+                <p class="aero-subtitle">computer club community base camp yonago kosen, cccbc.yk のワールドワイドウェブ拠点</p>
+
+                <p class="aero-text">
+                    コンピュータ同好会の活動成果、マルチメディア・コンテンツ、Webインタフェース・ソリューションがここに。<br>
+                    私たちはコンピュータ・テクノロジーを活用した活動を通してよりクリエイティビティを発揮し、スマートなデジタル・ソリューションを生み出すことで、会員の技術力向上と価値向上、新しいユーザ体験の創出を目指します。
+                </p>
+
+                <div class="aero-contact">
+                    私たちへの参加、依頼、連絡はこちら：<br>
+                    <a href="mailto:info@example.com" class="aero-link">info@example.com</a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+
+
+
+    <script src="assets/logo_3d.js"></script>
+    <script>
+        // 時刻・アクセスの更新
+        function updateStats() {
+            const now = new Date();
+            document.getElementById('currentTime').textContent =
+                now.getHours().toString().padStart(2, '0') + ':' +
+                now.getMinutes().toString().padStart(2, '0') + ':' +
+                now.getSeconds().toString().padStart(2, '0');
+
+            // アクセス数の疑似更新
+            if (Math.random() > 0.98) {
+                const el = document.getElementById('accessCount');
+                let count = parseInt(el.textContent.replace(/,/g, ''));
+                el.textContent = (count + 1).toLocaleString();
+            }
+
+            // アンテナの演出: 基本4本、たまに3本
+            const bar4 = document.getElementById('bar-4');
+            if (bar4 && Math.random() > 0.95) {
+                if (Math.random() > 0.3) {
+                    bar4.style.opacity = "1";
+                } else {
+                    bar4.style.opacity = "0.2";
+                }
+            }
+        }
+
+        setInterval(updateStats, 1000);
+        updateStats();
+
+        // Canvas要素が未使用の場合は非表示にする（あるいは削除）
+        const headerCanvas = document.getElementById('headerCanvas');
+        if (headerCanvas) headerCanvas.style.display = 'none';
+    </script>
+</body>
+
+</html>
