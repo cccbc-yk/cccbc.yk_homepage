@@ -7,7 +7,7 @@
     const container = document.getElementById('logo-3d-container');
     if (!container) return;
 
-    const LOGO_SRC = 'assets/webp/Y2K同好会ロゴ.webp';
+    const LOGO_SRC = 'Web/main/assets/webp/y2k_club_logo.webp';
     const EXTRUDE_DEPTH = 80;
 
     let scene, camera, renderer, logoMesh;
