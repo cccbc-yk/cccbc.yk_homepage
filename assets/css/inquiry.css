@@ -1,0 +1,189 @@
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:"M PLUS Rounded 1c",sans-serif;
+}
+
+body{
+height:100vh;
+background:
+radial-gradient(circle at 20% 20%,#001a33,#000814);
+color:white;
+display:flex;
+justify-content:center;
+align-items:center;
+overflow:hidden;
+}
+
+/* 背景グリッド */
+
+.background-grid{
+position:fixed;
+width:100%;
+height:100%;
+background-image:
+linear-gradient(rgba(0,255,255,0.08) 1px,transparent 1px),
+linear-gradient(90deg,rgba(0,255,255,0.08) 1px,transparent 1px);
+background-size:40px 40px;
+animation:gridMove 10s linear infinite;
+}
+
+@keyframes gridMove{
+0%{transform:translateY(0);}
+100%{transform:translateY(40px);}
+}
+
+/* コンテナ */
+
+.contact-container{
+
+width:420px;
+padding:40px;
+
+margin-top: 200px;
+
+background:rgba(255,255,255,0.05);
+
+border:1px solid rgba(0,255,255,0.3);
+
+border-radius:20px;
+
+backdrop-filter:blur(15px);
+
+box-shadow:
+0 0 20px rgba(0,255,255,0.4),
+inset 0 0 10px rgba(0,255,255,0.2);
+
+animation:fadeIn 1s ease;
+
+}
+
+@keyframes fadeIn{
+from{
+opacity:0;
+transform:translateY(20px);
+}
+to{
+opacity:1;
+transform:translateY(0);
+}
+}
+
+h1{
+text-align:center;
+font-size:36px;
+letter-spacing:3px;
+margin-bottom:5px;
+
+background:linear-gradient(90deg,#00ffff,#66ccff);
+-webkit-background-clip:text;
+-webkit-text-fill-color:transparent;
+}
+
+.subtitle{
+text-align:center;
+font-size:14px;
+margin-bottom:30px;
+opacity:0.8;
+}
+
+/* input */
+
+.input-group{
+margin-bottom:20px;
+}
+
+label{
+font-size:13px;
+opacity:0.8;
+display:block;
+margin-bottom:6px;
+}
+
+input,select,textarea{
+
+width:100%;
+
+padding:10px;
+
+border-radius:8px;
+
+border:1px solid rgba(0,255,255,0.3);
+
+background:rgba(0,0,0,0.4);
+
+color:white;
+
+outline:none;
+
+transition:0.3s;
+}
+
+input:focus,
+select:focus,
+textarea:focus{
+
+border-color:#00ffff;
+
+box-shadow:0 0 10px #00ffff;
+
+}
+
+/* ボタン */
+
+.send-btn{
+
+width:100%;
+
+padding:12px;
+
+border:none;
+
+border-radius:10px;
+
+background:linear-gradient(90deg,#00ffff,#0088ff);
+
+color:white;
+
+font-size:16px;
+
+cursor:pointer;
+
+transition:0.3s;
+
+}
+
+.send-btn:hover{
+
+transform:translateY(-2px);
+
+box-shadow:0 0 15px #00ffff;
+
+}
+
+/* 戻る */
+
+.back-btn{
+
+display:block;
+
+text-align:center;
+
+margin-top:20px;
+
+text-decoration:none;
+
+color:#66ccff;
+
+font-size:14px;
+
+transition:0.3s;
+
+}
+
+.back-btn:hover{
+
+color:#00ffff;
+
+}
