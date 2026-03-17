@@ -725,17 +725,17 @@ h1 {
 
 /* 新機能 */
 .release-list li.new::before {
-    background-image: url("../images/gabigabi_修正.webp");
+    background-image: url("../images/new.webp");
 }
 
 /* 改善 */
 .release-list li.improve::before {
-    background-image: url("../images/gabigabi_修正.webp");
+    background-image: url("../images/improve.webp");
 }
 
 /* 修正 */
 .release-list li.fix::before {
-    background-image: url("../images/gabigabi_修正.webp");
+    background-image: url("../images/fix.webp");
 }
 
 
