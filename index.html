@@ -225,6 +225,8 @@
             
 
         </section>
+
+        
     </main>
 
 
@@ -292,6 +294,22 @@
             }
         });
     </script>
+
+
+    <!-- ページトップボタン -->
+    <button id="pageTop">PageTop</button>
+
+    <script>
+    const pageTop = document.getElementById("pageTop");
+    pageTop.onclick = () => {
+
+    window.scrollTo({
+    top:0,
+    behavior:"smooth"
+    });
+    };
+    </script>
+
 </body>
 
 </html>
