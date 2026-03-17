@@ -706,30 +706,37 @@ h1 {
 
 }
 
+/* 共通アイコン設定 */
+.release-list li::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 2px;
+
+    width: 18px;
+    height: 18px;
+
+    display: inline-block;
+
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
 /* 新機能 */
-
 .release-list li.new::before {
-
-    content: "✨";
-
+    background-image: url("/assets/images/gabigabi_修正.webp");
 }
 
 /* 改善 */
-
 .release-list li.improve::before {
-
-    content: "⚡";
-
+    background-image: url("/assets/images/gabigabi_修正.webp");
 }
 
 /* 修正 */
-
 .release-list li.fix::before {
-
-    content: "🛠";
-
+    background-image: url("/assets/images/gabigabi_修正.webp");
 }
-
 
 
 #pageTop {
