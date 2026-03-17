@@ -45,7 +45,7 @@
 body {
     margin: 0;
     padding: 0;
-    font-family: "M PLUS Rounded 1c", sans-serif;
+    font-family: "Hind", "M PLUS Rounded 1c", sans-serif;
     color: #333;
     overflow-x: hidden;
     /* 枠に合わせて1500px幅に固定したWindows XP Bliss */
@@ -368,64 +368,64 @@ h1 {
    活動風景スライドショー
 ================================ */
 
-.slide-container{
+.slide-container {
 
-width:100%;
-overflow:hidden;
-margin-top:20px;
-border-radius:12px;
-
-}
-
-.slide-track{
-
-display:flex;
-gap:20px;
-
-width:calc(250px * 10);
-
-animation:slideLoop 30s linear infinite;
+    width: 100%;
+    overflow: hidden;
+    margin-top: 20px;
+    border-radius: 12px;
 
 }
 
-.slide-track img{
+.slide-track {
 
-width:250px;
-height:160px;
+    display: flex;
+    gap: 20px;
 
-object-fit:cover;
+    width: calc(250px * 10);
 
-border-radius:10px;
+    animation: slideLoop 30s linear infinite;
 
-box-shadow:
-0 6px 20px rgba(0,0,0,0.25);
+}
 
-transition:0.3s;
+.slide-track img {
+
+    width: 250px;
+    height: 160px;
+
+    object-fit: cover;
+
+    border-radius: 10px;
+
+    box-shadow:
+        0 6px 20px rgba(0, 0, 0, 0.25);
+
+    transition: 0.3s;
 
 }
 
 /* ホバー拡大 */
 
-.slide-track img:hover{
+.slide-track img:hover {
 
-transform:scale(1.08);
+    transform: scale(1.08);
 
-box-shadow:
-0 10px 30px rgba(0,0,0,0.35);
+    box-shadow:
+        0 10px 30px rgba(0, 0, 0, 0.35);
 
 }
 
 /* 横スクロール */
 
-@keyframes slideLoop{
+@keyframes slideLoop {
 
-0%{
-transform:translateX(0);
-}
+    0% {
+        transform: translateX(0);
+    }
 
-100%{
-transform:translateX(-50%);
-}
+    100% {
+        transform: translateX(-50%);
+    }
 
 }
 
@@ -435,143 +435,139 @@ transform:translateX(-50%);
    イベントタイムライン
 ================================ */
 
-.event-timeline{
+.event-timeline {
 
-display:flex;
-flex-direction:column;
-gap:25px;
-margin-top:20px;
-position:relative;
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+    margin-top: 20px;
+    position: relative;
 
 }
 
 /* 中央ライン */
 
-.event-timeline::before{
+.event-timeline::before {
 
-content:"";
+    content: "";
 
-position:absolute;
+    position: absolute;
 
-left:40px;
-top:0;
-bottom:0;
+    left: 40px;
+    top: 0;
+    bottom: 0;
 
-width:3px;
+    width: 3px;
 
-background:linear-gradient(
-180deg,
-#00d2ff,
-#0077ff
-);
+    background: linear-gradient(180deg,
+            #00d2ff,
+            #0077ff);
 
-border-radius:2px;
+    border-radius: 2px;
 
-box-shadow:0 0 10px rgba(0,210,255,0.6);
+    box-shadow: 0 0 10px rgba(0, 210, 255, 0.6);
 
 }
 
 /* カード */
 
-.event-card{
+.event-card {
 
-display:flex;
-align-items:flex-start;
-gap:20px;
+    display: flex;
+    align-items: flex-start;
+    gap: 20px;
 
-padding-left:80px;
+    padding-left: 80px;
 
-position:relative;
+    position: relative;
 
 }
 
 /* 月 */
 
-.event-month{
+.event-month {
 
-width:70px;
-height:70px;
+    width: 70px;
+    height: 70px;
 
-display:flex;
-align-items:center;
-justify-content:center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
-font-weight:bold;
-font-size:18px;
+    font-weight: bold;
+    font-size: 18px;
 
-color:white;
+    color: white;
 
-background:linear-gradient(
-145deg,
-#00d2ff,
-#0066ff
-);
+    background: linear-gradient(145deg,
+            #00d2ff,
+            #0066ff);
 
-border-radius:50%;
+    border-radius: 50%;
 
-box-shadow:
-0 5px 20px rgba(0,0,0,0.25),
-0 0 15px rgba(0,210,255,0.7);
+    box-shadow:
+        0 5px 20px rgba(0, 0, 0, 0.25),
+        0 0 15px rgba(0, 210, 255, 0.7);
 
-position:absolute;
-left:5px;
+    position: absolute;
+    left: 5px;
 
 }
 
 /* 内容カード */
 
-.event-content{
+.event-content {
 
-background:rgba(255,255,255,0.35);
+    background: rgba(255, 255, 255, 0.35);
 
-backdrop-filter:blur(10px);
+    backdrop-filter: blur(10px);
 
-padding:20px 25px;
+    padding: 20px 25px;
 
-border-radius:12px;
+    border-radius: 12px;
 
-border-top:1px solid rgba(255,255,255,0.8);
-border-left:1px solid rgba(255,255,255,0.6);
+    border-top: 1px solid rgba(255, 255, 255, 0.8);
+    border-left: 1px solid rgba(255, 255, 255, 0.6);
 
-box-shadow:
-0 10px 25px rgba(0,0,0,0.15);
+    box-shadow:
+        0 10px 25px rgba(0, 0, 0, 0.15);
 
-transition:0.3s;
+    transition: 0.3s;
 
 }
 
 /* ホバー */
 
-.event-card:hover .event-content{
+.event-card:hover .event-content {
 
-transform:translateY(-5px) scale(1.02);
+    transform: translateY(-5px) scale(1.02);
 
-box-shadow:
-0 20px 40px rgba(0,0,0,0.25);
+    box-shadow:
+        0 20px 40px rgba(0, 0, 0, 0.25);
 
 }
 
 /* タイトル */
 
-.event-content h3{
+.event-content h3 {
 
-margin:0;
-font-size:20px;
+    margin: 0;
+    font-size: 20px;
 
-color:#004fa3;
+    color: #004fa3;
 
 }
 
 /* 説明 */
 
-.event-content p{
+.event-content p {
 
-margin-top:8px;
-font-size:15px;
+    margin-top: 8px;
+    font-size: 15px;
 
-color:#003366;
+    color: #003366;
 
-line-height:1.6;
+    line-height: 1.6;
 
 }
 
@@ -582,193 +578,234 @@ line-height:1.6;
    リリースノート
 ================================ */
 
-.release-container{
+.release-container {
 
-display:flex;
-flex-direction:column;
-gap:25px;
-margin-top:20px;
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+    margin-top: 20px;
 
 }
 
 /* カード */
 
-.release-card{
+.release-card {
 
-background:rgba(255,255,255,0.35);
+    background: rgba(255, 255, 255, 0.35);
 
-backdrop-filter:blur(12px);
+    backdrop-filter: blur(12px);
 
-border-radius:14px;
+    border-radius: 14px;
 
-padding:20px 25px;
+    padding: 20px 25px;
 
-border-top:1px solid rgba(255,255,255,0.9);
-border-left:1px solid rgba(255,255,255,0.6);
+    border-top: 1px solid rgba(255, 255, 255, 0.9);
+    border-left: 1px solid rgba(255, 255, 255, 0.6);
 
-box-shadow:
-0 10px 30px rgba(0,0,0,0.15),
-inset 0 0 10px rgba(255,255,255,0.5);
+    box-shadow:
+        0 10px 30px rgba(0, 0, 0, 0.15),
+        inset 0 0 10px rgba(255, 255, 255, 0.5);
 
-transition:0.3s;
+    transition: 0.3s;
 
 }
 
 /* ホバー */
 
-.release-card:hover{
+.release-card:hover {
 
-transform:translateY(-6px) scale(1.01);
+    transform: translateY(-6px) scale(1.01);
 
-box-shadow:
-0 20px 45px rgba(0,0,0,0.25);
+    box-shadow:
+        0 20px 45px rgba(0, 0, 0, 0.25);
 
 }
 
 /* ヘッダー */
 
-.release-header{
+.release-header {
 
-display:flex;
-justify-content:space-between;
-align-items:center;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 
-margin-bottom:10px;
+    margin-bottom: 10px;
 
 }
 
 /* バージョン */
 
-.release-version{
+.release-version {
 
-font-weight:bold;
+    font-weight: bold;
 
-font-size:20px;
+    font-size: 20px;
 
-color:white;
+    color: white;
 
-padding:5px 12px;
+    padding: 5px 12px;
 
-border-radius:8px;
+    border-radius: 8px;
 
-background:linear-gradient(
-145deg,
-#00d2ff,
-#0077ff
-);
+    background: linear-gradient(145deg,
+            #00d2ff,
+            #0077ff);
 
-box-shadow:
-0 0 12px rgba(0,210,255,0.7);
+    box-shadow:
+        0 0 12px rgba(0, 210, 255, 0.7);
 
 }
 
 /* 日付 */
 
-.release-date{
+.release-date {
 
-font-size:14px;
+    font-size: 14px;
 
-color:#003366;
+    color: #003366;
 
-opacity:0.8;
+    opacity: 0.8;
 
 }
 
 /* リスト */
 
-.release-list{
+.release-list {
 
-list-style:none;
-padding:0;
-margin:0;
+    list-style: none;
+    padding: 0;
+    margin: 0;
 
 }
 
 /* 各項目 */
 
-.release-list li{
+.release-list li {
 
-margin:8px 0;
+    margin: 8px 0;
 
-padding-left:26px;
+    padding-left: 26px;
 
-position:relative;
+    position: relative;
 
-font-size:15px;
+    font-size: 15px;
 
-color:#003366;
+    color: #003366;
 
 }
 
 /* アイコン */
 
-.release-list li::before{
+.release-list li::before {
 
-position:absolute;
-left:0;
-top:2px;
+    position: absolute;
+    left: 0;
+    top: 2px;
 
-font-size:14px;
+    font-size: 14px;
 
 }
 
 /* 新機能 */
 
-.release-list li.new::before{
+.release-list li.new::before {
 
-content:"✨";
+    content: "✨";
 
 }
 
 /* 改善 */
 
-.release-list li.improve::before{
+.release-list li.improve::before {
 
-content:"⚡";
+    content: "⚡";
 
 }
 
 /* 修正 */
 
-.release-list li.fix::before{
+.release-list li.fix::before {
 
-content:"🛠";
-
-}
-
-
-
-#pageTop{
-
-position:fixed;
-
-bottom:30px;
-right:30px;
-
-background:#d22b2b;
-
-color:white;
-
-border:none;
-
-padding:15px 25px;
-
-font-size:16px;
-
-border-radius:20px;
-
-cursor:pointer;
-
-box-shadow:0 8px 20px rgba(0,0,0,0.3);
-
-transition:0.3s;
+    content: "🛠";
 
 }
 
-#pageTop:hover{
 
-transform:translateY(-3px);
 
-box-shadow:0 12px 25px rgba(0,0,0,0.4);
+#pageTop {
+    position: fixed;
+    bottom: 30px;
+    right: calc(max((100vw - 1500px) / 2, 0px));
+    
+    /* ボタン本体のスタイル（フルティガーエアロ風に改善） */
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.5) 0%, rgba(255, 255, 255, 0) 50%), #0077ff;
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.6);
+    padding: 12px 25px;
+    font-size: 16px;
+    font-weight: bold;
+    border-radius: 50px;
+    cursor: pointer;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3), inset 0 0 10px rgba(255, 255, 255, 0.5);
+    transition: 0.3s cubic-bezier(0.17, 0.67, 0.83, 0.67);
+    z-index: 1000;
+}
 
+/* ボタンの「上」に画像を表示するための擬似要素 */
+#pageTop::before {
+    content: "";
+    position: absolute;
+    bottom: 100%; /* ボタンの真上に配置 */
+    left: 50%;
+    transform: translateX(-50%) translateY(-10px);
+    width: 60px; /* 画像のサイズ */
+    height: 60px;
+    background-image: url("../images/top.webp");
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center bottom;
+    transition: transform 0.3s ease;
+    pointer-events: none;
+}
+
+#pageTop:hover {
+    transform: translateY(-5px);
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.6) 0%, rgba(255, 255, 255, 0.1) 50%), #3399ff;
+    box-shadow: 0 12px 25px rgba(0, 0, 0, 0.4);
+}
+
+#pageTop:hover::before {
+    /* ホバー時に画像が少し跳ねるアニメーション */
+    transform: translateX(-50%) translateY(-25px);
+}
+
+/* --- Typography Helpers --- */
+.hind-light {
+  font-family: "Hind", sans-serif;
+  font-weight: 300;
+  font-style: normal;
+}
+
+.hind-regular {
+  font-family: "Hind", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+}
+
+.hind-medium {
+  font-family: "Hind", sans-serif;
+  font-weight: 500;
+  font-style: normal;
+}
+
+.hind-semibold {
+  font-family: "Hind", sans-serif;
+  font-weight: 600;
+  font-style: normal;
+}
+
+.hind-bold {
+  font-family: "Hind", sans-serif;
+  font-weight: 700;
+  font-style: normal;
 }

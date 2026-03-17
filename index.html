@@ -8,7 +8,7 @@
     <!-- Google Fonts: M PLUS Rounded 1c -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Hind:wght@300;400;500;600;700&family=M+PLUS+Rounded+1c:wght@400;700&display=swap" rel="stylesheet">
     <!-- Three.js for 3D Logo -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <link rel="stylesheet" href="assets/css/style.css">
@@ -300,9 +300,43 @@
             earthBtn.classList.toggle('active');
         });
 
-        // パネルの外をクリックしたら閉じる（オプション）
+        // スマートリンクハンドラー：未設定やリンク切れを404へ
+        document.addEventListener('click', async (e) => {
+            const link = e.target.closest('a');
+            if (!link) return;
+
+            const href = link.getAttribute('href');
+
+            // 1. 「#」や空文字（未設定）の場合は404へ
+            if (href === '#' || !href) {
+                e.preventDefault();
+                window.location.href = '404.html';
+                return;
+            }
+
+            // 2. 外部サイト、メール、ページ内アンカー等はそのまま
+            if (href.startsWith('http') || href.startsWith('mailto:') || href.startsWith('#')) return;
+
+            // 3. 内部リンクが実際に存在するかチェック（開発中の保険）
+            // ※ローカルのfile://環境では動かない場合があります
+            if (window.location.protocol.startsWith('http')) {
+                try {
+                    const response = await fetch(href, { method: 'HEAD' });
+                    if (!response.ok && response.status === 404) {
+                        e.preventDefault();
+                        window.location.href = '404.html';
+                    }
+                } catch (err) {
+                    // 通信エラー等はブラウザのデフォルト挙動に任せる
+                }
+            }
+        });
+
+        // パネルの外をクリックしたら閉じる
         document.addEventListener('click', (e) => {
-            if (!earthBtn.contains(e.target) && !menuPanel.contains(e.target)) {
+            const earthBtn = document.getElementById('header-earth-part');
+            const menuPanel = document.getElementById('menuPanel');
+            if (earthBtn && !earthBtn.contains(e.target) && !menuPanel.contains(e.target)) {
                 menuPanel.classList.remove('open');
                 earthBtn.classList.remove('active');
             }
