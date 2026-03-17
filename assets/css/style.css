@@ -154,7 +154,7 @@ body::before {
     display: flex;
     flex-direction: column;
     gap: 20px;
-    z-index: 0;
+    z-index: 5;
     transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.5s;
     pointer-events: none;
 }
