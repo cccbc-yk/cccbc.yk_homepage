@@ -574,3 +574,164 @@ color:#003366;
 line-height:1.6;
 
 }
+
+
+
+
+/* ===============================
+   リリースノート
+================================ */
+
+.release-container{
+
+display:flex;
+flex-direction:column;
+gap:25px;
+margin-top:20px;
+
+}
+
+/* カード */
+
+.release-card{
+
+background:rgba(255,255,255,0.35);
+
+backdrop-filter:blur(12px);
+
+border-radius:14px;
+
+padding:20px 25px;
+
+border-top:1px solid rgba(255,255,255,0.9);
+border-left:1px solid rgba(255,255,255,0.6);
+
+box-shadow:
+0 10px 30px rgba(0,0,0,0.15),
+inset 0 0 10px rgba(255,255,255,0.5);
+
+transition:0.3s;
+
+}
+
+/* ホバー */
+
+.release-card:hover{
+
+transform:translateY(-6px) scale(1.01);
+
+box-shadow:
+0 20px 45px rgba(0,0,0,0.25);
+
+}
+
+/* ヘッダー */
+
+.release-header{
+
+display:flex;
+justify-content:space-between;
+align-items:center;
+
+margin-bottom:10px;
+
+}
+
+/* バージョン */
+
+.release-version{
+
+font-weight:bold;
+
+font-size:20px;
+
+color:white;
+
+padding:5px 12px;
+
+border-radius:8px;
+
+background:linear-gradient(
+145deg,
+#00d2ff,
+#0077ff
+);
+
+box-shadow:
+0 0 12px rgba(0,210,255,0.7);
+
+}
+
+/* 日付 */
+
+.release-date{
+
+font-size:14px;
+
+color:#003366;
+
+opacity:0.8;
+
+}
+
+/* リスト */
+
+.release-list{
+
+list-style:none;
+padding:0;
+margin:0;
+
+}
+
+/* 各項目 */
+
+.release-list li{
+
+margin:8px 0;
+
+padding-left:26px;
+
+position:relative;
+
+font-size:15px;
+
+color:#003366;
+
+}
+
+/* アイコン */
+
+.release-list li::before{
+
+position:absolute;
+left:0;
+top:2px;
+
+font-size:14px;
+
+}
+
+/* 新機能 */
+
+.release-list li.new::before{
+
+content:"✨";
+
+}
+
+/* 改善 */
+
+.release-list li.improve::before{
+
+content:"⚡";
+
+}
+
+/* 修正 */
+
+.release-list li.fix::before{
+
+content:"🛠";
+
+}
