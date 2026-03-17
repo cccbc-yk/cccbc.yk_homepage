@@ -725,17 +725,17 @@ h1 {
 
 /* 新機能 */
 .release-list li.new::before {
-    background-image: url("/assets/images/gabigabi_修正.webp");
+    background-image: url("../images/gabigabi_修正.webp");
 }
 
 /* 改善 */
 .release-list li.improve::before {
-    background-image: url("/assets/images/gabigabi_修正.webp");
+    background-image: url("../images/gabigabi_修正.webp");
 }
 
 /* 修正 */
 .release-list li.fix::before {
-    background-image: url("/assets/images/gabigabi_修正.webp");
+    background-image: url("../images/gabigabi_修正.webp");
 }
 
 
@@ -743,7 +743,7 @@ h1 {
     position: fixed;
     bottom: 30px;
     right: calc(max((100vw - 1500px) / 2, 0px));
-    
+
     /* ボタン本体のスタイル（フルティガーエアロ風に改善） */
     background: linear-gradient(180deg, rgba(255, 255, 255, 0.5) 0%, rgba(255, 255, 255, 0) 50%), #0077ff;
     color: white;
@@ -762,10 +762,12 @@ h1 {
 #pageTop::before {
     content: "";
     position: absolute;
-    bottom: 100%; /* ボタンの真上に配置 */
+    bottom: 100%;
+    /* ボタンの真上に配置 */
     left: 50%;
     transform: translateX(-50%) translateY(-10px);
-    width: 60px; /* 画像のサイズ */
+    width: 60px;
+    /* 画像のサイズ */
     height: 60px;
     background-image: url("../images/top.webp");
     background-size: contain;
@@ -788,31 +790,31 @@ h1 {
 
 /* --- Typography Helpers --- */
 .hind-light {
-  font-family: "Hind", sans-serif;
-  font-weight: 300;
-  font-style: normal;
+    font-family: "Hind", sans-serif;
+    font-weight: 300;
+    font-style: normal;
 }
 
 .hind-regular {
-  font-family: "Hind", sans-serif;
-  font-weight: 400;
-  font-style: normal;
+    font-family: "Hind", sans-serif;
+    font-weight: 400;
+    font-style: normal;
 }
 
 .hind-medium {
-  font-family: "Hind", sans-serif;
-  font-weight: 500;
-  font-style: normal;
+    font-family: "Hind", sans-serif;
+    font-weight: 500;
+    font-style: normal;
 }
 
 .hind-semibold {
-  font-family: "Hind", sans-serif;
-  font-weight: 600;
-  font-style: normal;
+    font-family: "Hind", sans-serif;
+    font-weight: 600;
+    font-style: normal;
 }
 
 .hind-bold {
-  font-family: "Hind", sans-serif;
-  font-weight: 700;
-  font-style: normal;
+    font-family: "Hind", sans-serif;
+    font-weight: 700;
+    font-style: normal;
 }
