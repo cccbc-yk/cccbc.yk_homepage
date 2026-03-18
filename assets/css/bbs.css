@@ -1,0 +1,449 @@
+/* ===============================
+   BBS Styles - Ultra Stylish Frutiger Aero
+================================ */
+
+.bbs-wrapper {
+    /* aero-content-box をベースにさらにカスタム */
+    max-width: 850px;
+    padding: 40px 50px;
+    margin-top: 20px;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.2));
+    border: 1px solid rgba(255, 255, 255, 0.8);
+    box-shadow: 
+        0 15px 35px rgba(0, 50, 100, 0.1),
+        inset 0 0 20px rgba(255, 255, 255, 0.6),
+        inset 0 2px 2px rgba(255, 255, 255, 1);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    position: relative;
+    overflow: hidden;
+}
+
+/* 輝く光のエフェクト */
+.bbs-wrapper::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(255,255,255,0.8) 0%, rgba(255,255,255,0) 60%);
+    opacity: 0.1;
+    pointer-events: none;
+    transform: rotate(30deg);
+}
+
+.bbs-title {
+    font-size: 2.8rem;
+    font-weight: 800;
+    margin: 0;
+    background: linear-gradient(180deg, #0077ff, #00d2ff);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-shadow: 0 4px 15px rgba(0, 210, 255, 0.4);
+    letter-spacing: 2px;
+}
+
+.bbs-subtitle {
+    font-size: 1.1rem;
+    color: #004fa3;
+    margin-bottom: 30px;
+    font-weight: bold;
+}
+
+/* アクションエリア (ボタンと検索) */
+.bbs-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+    gap: 15px;
+}
+
+@media (max-width: 600px) {
+    .bbs-actions {
+        flex-direction: column;
+        align-items: stretch;
+    }
+}
+
+.bbs-btn {
+    border: none;
+    outline: none;
+    border-radius: 30px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    backdrop-filter: blur(5px);
+}
+
+.primary-btn {
+    padding: 12px 25px;
+    background: linear-gradient(135deg, #00d2ff 0%, #0077ff 100%);
+    color: #fff;
+    font-size: 1rem;
+    box-shadow: 0 4px 15px rgba(0, 119, 255, 0.4), inset 0 2px 4px rgba(255,255,255,0.4);
+    border: 1px solid rgba(255,255,255,0.5);
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+    white-space: nowrap;
+}
+
+.primary-btn:hover {
+    transform: translateY(-2px) scale(1.05);
+    box-shadow: 0 8px 25px rgba(0, 119, 255, 0.6), inset 0 2px 4px rgba(255,255,255,0.6);
+}
+
+.primary-btn:active {
+    transform: translateY(1px);
+}
+
+.bbs-search {
+    display: flex;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.6);
+    border-radius: 30px;
+    padding: 5px 5px 5px 20px;
+    border: 1px solid rgba(255, 255, 255, 0.8);
+    box-shadow: inset 0 2px 5px rgba(0,0,0,0.05);
+    flex-grow: 1;
+    max-width: 300px;
+}
+
+.bbs-search input {
+    border: none;
+    background: transparent;
+    outline: none;
+    width: 100%;
+    color: #003366;
+    font-size: 1rem;
+    font-weight: 500;
+}
+
+.bbs-search input::placeholder {
+    color: rgba(0, 51, 102, 0.5);
+}
+
+.icon-btn {
+    background: linear-gradient(135deg, #ffffff, #e6f7ff);
+    color: #0077ff;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    font-size: 1.1rem;
+    flex-shrink: 0;
+}
+
+.icon-btn:hover {
+    background: #00d2ff;
+    color: white;
+    transform: rotate(15deg) scale(1.1);
+}
+
+/* 投稿リスト */
+.bbs-list {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.bbs-card {
+    background: rgba(255, 255, 255, 0.45);
+    border-radius: 15px;
+    padding: 20px 25px;
+    text-align: left;
+    border: 1px solid rgba(255, 255, 255, 0.6);
+    border-top: 1px solid rgba(255, 255, 255, 0.9);
+    border-left: 1px solid rgba(255, 255, 255, 0.9);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05), inset 0 0 10px rgba(255, 255, 255, 0.4);
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+}
+
+/* ピン留めエフェクト */
+.bbs-card.pin {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.6), rgba(230, 247, 255, 0.4));
+    border: 1px solid rgba(0, 210, 255, 0.5);
+    box-shadow: 0 8px 20px rgba(0, 210, 255, 0.15), inset 0 0 15px rgba(255, 255, 255, 0.8);
+}
+
+.bbs-card.pin::after {
+    content: '📌';
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    font-size: 1.5rem;
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
+    opacity: 0.8;
+}
+
+.bbs-card:hover {
+    transform: translateY(-5px) scale(1.01);
+    background: rgba(255, 255, 255, 0.7);
+    box-shadow: 0 15px 30px rgba(0, 100, 200, 0.15), inset 0 0 15px rgba(255, 255, 255, 0.8);
+    border-color: rgba(0, 210, 255, 0.4);
+}
+
+/* カード内部 */
+.bbs-card-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 12px;
+}
+
+.bbs-tag {
+    font-size: 0.75rem;
+    font-weight: 700;
+    padding: 4px 10px;
+    border-radius: 20px;
+    color: white;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.bbs-tag.important { background: linear-gradient(135deg, #ff4d4d, #ff1a1a); }
+.bbs-tag.idea { background: linear-gradient(135deg, #ffb300, #ff8c00); }
+.bbs-tag.question { background: linear-gradient(135deg, #00d2ff, #0077ff); }
+.bbs-tag.report { background: linear-gradient(135deg, #00e676, #00c853); }
+
+.bbs-date {
+    font-size: 0.85rem;
+    color: #6688aa;
+    font-weight: 500;
+}
+
+.bbs-post-title {
+    font-size: 1.3rem;
+    color: #004fa3;
+    margin: 0 0 10px 0;
+    line-height: 1.4;
+    transition: color 0.3s;
+}
+
+.bbs-card:hover .bbs-post-title {
+    color: #0077ff;
+}
+
+.bbs-post-excerpt {
+    font-size: 0.95rem;
+    color: #335577;
+    margin: 0 0 15px 0;
+    line-height: 1.6;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.bbs-card-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 1px solid rgba(0, 50, 100, 0.1);
+    padding-top: 12px;
+}
+
+.bbs-author {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #004fa3;
+}
+
+.author-icon {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: #ccc;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    border: 2px solid white;
+}
+
+/* 簡易的なアイコン色分け */
+.author-icon.admin { background: linear-gradient(135deg, #ff4d4d, #ffb300); }
+.author-icon.member-1 { background: linear-gradient(135deg, #00d2ff, #0077ff); }
+.author-icon.member-2 { background: linear-gradient(135deg, #00e676, #00d2ff); }
+.author-icon.member-3 { background: linear-gradient(135deg, #cc00ff, #0077ff); }
+
+.bbs-stats {
+    display: flex;
+    gap: 15px;
+    color: #6688aa;
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+.stat {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+/* ページネーション */
+.bbs-pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    margin-top: 40px;
+}
+
+.page-btn {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    border: 1px solid rgba(255, 255, 255, 0.6);
+    background: rgba(255, 255, 255, 0.4);
+    color: #004fa3;
+    font-weight: bold;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+}
+
+.page-btn:hover:not(.active) {
+    background: rgba(255, 255, 255, 0.8);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(0, 100, 200, 0.15);
+}
+
+.page-btn.active {
+    background: linear-gradient(135deg, #00d2ff, #0077ff);
+    color: white;
+    border: none;
+    box-shadow: 0 4px 10px rgba(0, 119, 255, 0.4);
+    transform: scale(1.1);
+}
+
+.page-dots {
+    color: #004fa3;
+    font-weight: bold;
+    letter-spacing: 2px;
+}
+
+/* ===============================
+   BBS Modal Styles
+================================ */
+.bbs-modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 30, 60, 0.4);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.bbs-modal.show {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 1;
+}
+
+.bbs-modal-content {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.6));
+    border: 1px solid rgba(255, 255, 255, 0.9);
+    border-radius: 20px;
+    padding: 30px;
+    width: 90%;
+    max-width: 500px;
+    position: relative;
+    box-shadow: 0 20px 40px rgba(0, 50, 100, 0.2), inset 0 0 20px rgba(255, 255, 255, 0.8);
+    transform: translateY(-20px) scale(0.95);
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.bbs-modal.show .bbs-modal-content {
+    transform: translateY(0) scale(1);
+}
+
+.close-modal {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    font-size: 28px;
+    font-weight: bold;
+    color: #004fa3;
+    cursor: pointer;
+    transition: color 0.3s;
+    line-height: 1;
+}
+
+.close-modal:hover {
+    color: #ff4d4d;
+}
+
+.bbs-modal-title {
+    font-size: 1.8rem;
+    color: #004fa3;
+    margin-top: 0;
+    margin-bottom: 20px;
+    text-align: center;
+    border-bottom: 1px solid rgba(0, 79, 163, 0.2);
+    padding-bottom: 10px;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    color: #003366;
+    font-weight: 600;
+    font-size: 0.95rem;
+}
+
+.form-group input, 
+.form-group select, 
+.form-group textarea {
+    width: 100%;
+    padding: 12px;
+    border-radius: 10px;
+    border: 1px solid rgba(0, 79, 163, 0.3);
+    background: rgba(255, 255, 255, 0.7);
+    color: #003366;
+    font-family: inherit;
+    font-size: 1rem;
+    box-sizing: border-box;
+    transition: all 0.3s ease;
+}
+
+.form-group input:focus, 
+.form-group select:focus, 
+.form-group textarea:focus {
+    outline: none;
+    border-color: #0077ff;
+    box-shadow: 0 0 10px rgba(0, 119, 255, 0.3);
+    background: rgba(255, 255, 255, 0.95);
+}
+
+.submit-btn {
+    width: 100%;
+    margin-top: 10px;
+    font-size: 1.1rem;
+    padding: 15px;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}

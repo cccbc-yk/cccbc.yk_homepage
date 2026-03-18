@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>同好会掲示板 - CCCBC</title>
+    <!-- Google Fonts: M PLUS Rounded 1c -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Hind:wght@300;400;500;600;700&family=M+PLUS+Rounded+1c:wght@400;700&display=swap" rel="stylesheet">
+    <!-- Three.js for 3D Logo -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <link rel="stylesheet" href="../assets/css/bbs.css">
+</head>
+
+<body>
+    <div class="side-frame side-frame-left"></div>
+    <div class="side-frame side-frame-right"></div>
+    <div id="header-earth-part"></div>
+    <div id="header-container">
+        <div id="canvas-wrap">
+            <div id="header-bg-part"></div>
+
+            <canvas id="headerCanvas"></canvas>
+            <div id="box-time" class="info-box">
+                <span class="label">Time</span>
+                <span id="currentTime" class="value">00:00:00</span>
+            </div>
+
+            <div id="box-network" class="info-box">
+                <span class="label">Network</span>
+                <div id="antenna-container">
+                    <svg width="40" height="26" viewBox="0 0 50 30">
+                        <path d="M 8 28 V 10 M 8 10 L 4 5 H 12 Z" stroke="white" stroke-width="2" fill="none" />
+                        <rect class="sig-bar active" x="18" y="22" width="4" height="6" rx="1" />
+                        <rect class="sig-bar active" x="26" y="15" width="4" height="13" rx="1" />
+                        <rect class="sig-bar active" x="34" y="9" width="4" height="19" rx="1" />
+                        <rect class="sig-bar active" id="bar-4" x="42" y="3" width="4" height="25" rx="1" />
+                    </svg>
+                </div>
+            </div>
+
+            <div id="box-access" class="info-box">
+                <span class="label">Access</span>
+                <span id="accessCount" class="value">10,841</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="menu-panel" id="menuPanel">
+        <a href="../index.html">ホーム</a>
+        <a href="../index.html#about">同好会紹介</a>
+        <a href="#">部員紹介</a>
+        <a href="#">部員作品一覧</a>
+        <a href="../index.html#activity">活動実績</a>
+        <a href="../index.html#release-notes">リリースノート</a>
+        <a href="#">募集要項</a>
+        <a href="./bbs.html">同好会掲示板</a>
+        <a href="./inquiry.html">お問い合わせ</a>
+        <a href="#">サイト設定</a>
+    </div>
+
+    <main>
+        <div class="bbs-wrapper aero-content-box">
+            <h1 class="bbs-title">BULLETIN BOARD</h1>
+            <p class="bbs-subtitle">コンピュータ同好会 公式掲示板</p>
+            
+            <div class="bbs-actions">
+                <button class="bbs-btn primary-btn">+ 新規投稿</button>
+                <div class="bbs-search">
+                    <input type="text" placeholder="キーワード検索...">
+                    <button class="bbs-btn icon-btn">🔍</button>
+                </div>
+            </div>
+
+            <div class="bbs-list">
+                <!-- 投稿カード 1 -->
+                <div class="bbs-card pin">
+                    <div class="bbs-card-header">
+                        <span class="bbs-tag important">重要</span>
+                        <span class="bbs-date">2026/03/18 10:00</span>
+                    </div>
+                    <h2 class="bbs-post-title">春のプログラミング合宿のお知らせ</h2>
+                    <p class="bbs-post-excerpt">今年の春休みは恒例の開発合宿を行います！参加希望者はスレッド内のフォームから詳細を確認してください。</p>
+                    <div class="bbs-card-footer">
+                        <div class="bbs-author">
+                            <div class="author-icon admin"></div>
+                            <span>部長</span>
+                        </div>
+                        <div class="bbs-stats">
+                            <span class="stat">💬 12</span>
+                            <span class="stat">👀 145</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 投稿カード 2 -->
+                <div class="bbs-card">
+                    <div class="bbs-card-header">
+                        <span class="bbs-tag idea">アイデア</span>
+                        <span class="bbs-date">2026/03/17 21:30</span>
+                    </div>
+                    <h2 class="bbs-post-title">文化祭の展示アプリについてブレスト</h2>
+                    <p class="bbs-post-excerpt">今年の文化祭で展示するアプリのアイデアを募集します。今のところ、校内探索系のゲームが候補に挙がっていますが...</p>
+                    <div class="bbs-card-footer">
+                        <div class="bbs-author">
+                            <div class="author-icon member-1"></div>
+                            <span>副部長</span>
+                        </div>
+                        <div class="bbs-stats">
+                            <span class="stat">💬 5</span>
+                            <span class="stat">👀 89</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 投稿カード 3 -->
+                <div class="bbs-card">
+                    <div class="bbs-card-header">
+                        <span class="bbs-tag question">質問</span>
+                        <span class="bbs-date">2026/03/15 14:15</span>
+                    </div>
+                    <h2 class="bbs-post-title">Unityでのシェーダー作成について教えてください</h2>
+                    <p class="bbs-post-excerpt">水面の表現を作りたいのですが、Shader Graphでうまく波の動きが作れません。どなたか詳しい方いませんか？</p>
+                    <div class="bbs-card-footer">
+                        <div class="bbs-author">
+                            <div class="author-icon member-2"></div>
+                            <span>1年生部員A</span>
+                        </div>
+                        <div class="bbs-stats">
+                            <span class="stat">💬 3</span>
+                            <span class="stat">👀 42</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 投稿カード 4 -->
+                <div class="bbs-card">
+                    <div class="bbs-card-header">
+                        <span class="bbs-tag report">進捗報告</span>
+                        <span class="bbs-date">2026/03/10 18:45</span>
+                    </div>
+                    <h2 class="bbs-post-title">コンフェス用ゲーム「Cyber Glide」アルファ版完成</h2>
+                    <p class="bbs-post-excerpt">チームBです！ようやく基本動作とステージ1が遊べる状態になりました。テストプレイしてくれる人を募集します！</p>
+                    <div class="bbs-card-footer">
+                        <div class="bbs-author">
+                            <div class="author-icon member-3"></div>
+                            <span>2年生部員C</span>
+                        </div>
+                        <div class="bbs-stats">
+                            <span class="stat">💬 8</span>
+                            <span class="stat">👀 112</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="bbs-pagination">
+                <button class="page-btn active">1</button>
+                <button class="page-btn">2</button>
+                <button class="page-btn">3</button>
+                <span class="page-dots">...</span>
+                <button class="page-btn">10</button>
+            </div>
+        </div>
+        
+        <section class="footer">
+            <div style="margin-top: 50px;">
+                <p style="color: aliceblue;">Copyright© cccbc.yk 2026
+                    <br>
+                    Powered by Github Pages
+                    <br>
+                </p>
+            </div>
+        </section>
+    </main>
+
+    <!-- 新規投稿モーダル -->
+    <div id="postModal" class="bbs-modal">
+        <div class="bbs-modal-content aero-content-box">
+            <span class="close-modal">&times;</span>
+            <h2 class="bbs-modal-title">新規投稿</h2>
+            <form id="postForm">
+                <div class="form-group">
+                    <label>タグ:</label>
+                    <select id="postTag" required>
+                        <option value="important">重要</option>
+                        <option value="idea">アイデア</option>
+                        <option value="question">質問</option>
+                        <option value="report">進捗報告</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>タイトル:</label>
+                    <input type="text" id="postTitle" required placeholder="タイトルを入力">
+                </div>
+                <div class="form-group">
+                    <label>お名前:</label>
+                    <input type="text" id="postAuthor" required placeholder="名前または役職">
+                </div>
+                <div class="form-group">
+                    <label>内容:</label>
+                    <textarea id="postContent" required rows="5" placeholder="投稿内容を入力してください"></textarea>
+                </div>
+                <button type="submit" class="bbs-btn primary-btn submit-btn">投稿する</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- ページトップボタン -->
+    <button id="pageTop" style="position: fixed; bottom: 30px; right: calc(max((100vw - 1500px) / 2, 0px) + 20px);">PageTop</button>
+
+    <script>
+        // 本物のアクセス数を取得して更新
+        async function updateRealAccessCount() {
+            const el = document.getElementById('accessCount');
+            const siteId = "cccbc-yk-homepage"; // サイト識別用ID
+
+            try {
+                const response = await fetch(`https://api.visitorbadge.io/api/visitors?path=${siteId}&countOnly=true`);
+                const text = await response.text();
+                const match = text.match(/VISITORS:\s*([\d,]+)/i) || text.match(/<text.*?font-weight="bold".*?>([\d,]+)<\/text>/i);
+                const count = match ? parseInt(match[1].replace(/,/g, '')) : 0;
+                const baseCount = 0;
+                el.textContent = (baseCount + count).toLocaleString();
+            } catch (e) {
+                console.error("Access count fetch failed:", e);
+            }
+        }
+
+        // 時刻・ステータスの更新
+        function updateStats() {
+            const now = new Date();
+            document.getElementById('currentTime').textContent =
+                now.getHours().toString().padStart(2, '0') + ':' +
+                now.getMinutes().toString().padStart(2, '0') + ':' +
+                now.getSeconds().toString().padStart(2, '0');
+
+            // アンテナの演出: 基本4本、たまに3本
+            const bar4 = document.getElementById('bar-4');
+            if (bar4 && Math.random() > 0.95) {
+                bar4.style.opacity = Math.random() > 0.3 ? "1" : "0.2";
+            }
+        }
+
+        setInterval(updateStats, 1000);
+        updateStats();
+        updateRealAccessCount();
+
+        // Canvas要素が未使用の場合は非表示にする
+        const headerCanvas = document.getElementById('headerCanvas');
+        if (headerCanvas) headerCanvas.style.display = 'none';
+
+        // 地球メニューの開閉
+        const earthBtn = document.getElementById('header-earth-part');
+        const menuPanel = document.getElementById('menuPanel');
+
+        earthBtn.addEventListener('click', () => {
+            menuPanel.classList.toggle('open');
+            earthBtn.classList.toggle('active');
+        });
+
+        document.addEventListener('click', async (e) => {
+            const link = e.target.closest('a');
+            if (!link) return;
+
+            const href = link.getAttribute('href');
+            if (href === '#' || !href) {
+                e.preventDefault();
+                // window.location.href = '../404.html';
+                return;
+            }
+        });
+
+        document.addEventListener('click', (e) => {
+            if (earthBtn && !earthBtn.contains(e.target) && !menuPanel.contains(e.target)) {
+                menuPanel.classList.remove('open');
+                earthBtn.classList.remove('active');
+            }
+        });
+        
+        const pageTop = document.getElementById("pageTop");
+        if (pageTop) {
+            pageTop.onclick = () => {
+                window.scrollTo({
+                    top: 0,
+                    behavior: "smooth"
+                });
+            };
+        }
+
+        // --- 新規投稿機能 ---
+        const postModal = document.getElementById('postModal');
+        const openModalBtn = document.querySelector('.bbs-btn.primary-btn');
+        const closeModalBtn = document.querySelector('.close-modal');
+        const postForm = document.getElementById('postForm');
+        const bbsList = document.querySelector('.bbs-list');
+
+        if(openModalBtn && postModal) {
+            openModalBtn.addEventListener('click', () => {
+                postModal.classList.add('show');
+            });
+        }
+
+        if(closeModalBtn && postModal) {
+            closeModalBtn.addEventListener('click', () => {
+                postModal.classList.remove('show');
+            });
+        }
+
+        window.addEventListener('click', (e) => {
+            if (e.target === postModal) {
+                postModal.classList.remove('show');
+            }
+        });
+
+        const escapeHTML = (str) => {
+            return str.replace(/[&<>'"]/g, 
+                tag => ({
+                    '&': '&amp;',
+                    '<': '&lt;',
+                    '>': '&gt;',
+                    "'": '&#39;',
+                    '"': '&quot;'
+                }[tag] || tag)
+            );
+        };
+
+        const loadPosts = () => {
+            if(!bbsList) return;
+            const posts = JSON.parse(localStorage.getItem('bbs_posts')) || [];
+            
+            document.querySelectorAll('.dynamic-post').forEach(el => el.remove());
+
+            posts.forEach(post => {
+                const card = document.createElement('div');
+                card.className = 'bbs-card dynamic-post';
+                
+                let tagText = 'お知らせ';
+                let tagClass = post.tag;
+                if(post.tag === 'important') tagText = '重要';
+                else if(post.tag === 'idea') tagText = 'アイデア';
+                else if(post.tag === 'question') tagText = '質問';
+                else if(post.tag === 'report') tagText = '進捗報告';
+
+                const iconClasses = ['admin', 'member-1', 'member-2', 'member-3'];
+                const randomIcon = iconClasses[Math.abs(post.author.length) % iconClasses.length];
+
+                card.innerHTML = `
+                    <div class="bbs-card-header">
+                        <span class="bbs-tag ${tagClass}">${tagText}</span>
+                        <span class="bbs-date">${post.date}</span>
+                    </div>
+                    <h2 class="bbs-post-title">${escapeHTML(post.title)}</h2>
+                    <p class="bbs-post-excerpt">${escapeHTML(post.content).replace(/\n/g, '<br>')}</p>
+                    <div class="bbs-card-footer">
+                        <div class="bbs-author">
+                            <div class="author-icon ${randomIcon}"></div>
+                            <span>${escapeHTML(post.author)}</span>
+                        </div>
+                        <div class="bbs-stats">
+                            <span class="stat">💬 0</span>
+                            <span class="stat">👀 1</span>
+                        </div>
+                    </div>
+                `;
+                bbsList.insertBefore(card, bbsList.firstChild);
+            });
+        };
+
+        if(postForm) {
+            postForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const tag = document.getElementById('postTag').value;
+                const title = document.getElementById('postTitle').value;
+                const author = document.getElementById('postAuthor').value;
+                const content = document.getElementById('postContent').value;
+                
+                const now = new Date();
+                const dateStr = 
+                    now.getFullYear() + '/' + 
+                    String(now.getMonth()+1).padStart(2,'0') + '/' + 
+                    String(now.getDate()).padStart(2,'0') + ' ' + 
+                    String(now.getHours()).padStart(2,'0') + ':' + 
+                    String(now.getMinutes()).padStart(2,'0');
+
+                const post = { id: Date.now(), tag, title, author, content, date: dateStr };
+                
+                const posts = JSON.parse(localStorage.getItem('bbs_posts')) || [];
+                posts.unshift(post);
+                localStorage.setItem('bbs_posts', JSON.stringify(posts));
+                
+                postForm.reset();
+                postModal.classList.remove('show');
+                
+                loadPosts();
+            });
+        }
+
+        // 初期読み込み
+        loadPosts();
+    </script>
+</body>
+</html>
