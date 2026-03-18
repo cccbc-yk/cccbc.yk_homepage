@@ -1,0 +1,26 @@
+name: Deploy to Sakura Rental Server
+
+on:
+  push:
+    branches:
+      - kani-FurtigerAero  # mainブランチにPushされた時に実行（自身の環境に合わせて master などに変更してください）
+
+jobs:
+  web-deploy:
+    name: Deploy
+    runs-on: ubuntu-latest
+    steps:
+      # 1. リポジトリのコードを取得
+      - name: Get latest code
+        uses: actions/checkout@v4
+        
+      # 2. FTPでさくらのサーバーへ送信
+      - name: Sync files
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          protocol: ftps # 暗号化通信を推奨
+          local-dir: ./ # リポジトリのどのフォルダをアップするか（./ なら全体）
+          server-dir: www/ # サーバー側の転送先フォルダ
