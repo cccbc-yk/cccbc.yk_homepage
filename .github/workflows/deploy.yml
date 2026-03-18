@@ -23,4 +23,4 @@ jobs:
           password: ${{ secrets.FTP_PASSWORD }}
           protocol: ftps # 暗号化通信を推奨
           local-dir: ./ # リポジトリのどのフォルダをアップするか（./ なら全体）
-          server-dir: www/ # サーバー側の転送先フォルダ
+          server-dir: www/cccbc-yk-website/ # サーバー側の転送先フォルダ
