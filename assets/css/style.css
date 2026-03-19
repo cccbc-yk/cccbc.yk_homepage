@@ -818,3 +818,68 @@ h1 {
     font-weight: 700;
     font-style: normal;
 }
+
+/* ===============================
+   Global Theme Overrides
+================================ */
+
+/* Dark Mode Theme */
+html.theme-dark body {
+    background: #121212 !important;
+}
+html.theme-dark .hero-section::before {
+    opacity: 0.1 !important;
+}
+html.theme-dark .aero-content-box {
+    background: rgba(30,30,30,0.7) !important;
+    border-color: rgba(255,255,255,0.1) !important;
+}
+html.theme-dark .event-content,
+html.theme-dark .release-card,
+html.theme-dark .bbs-card {
+    background: rgba(40,40,40,0.8) !important;
+    color: #e0e0e0 !important;
+    border-color: rgba(255,255,255,0.1) !important;
+}
+html.theme-dark h1,
+html.theme-dark h2,
+html.theme-dark h3,
+html.theme-dark .aero-subtitle {
+    color: #66b2ff !important;
+}
+html.theme-dark .aero-text,
+html.theme-dark p {
+    color: #cccccc !important;
+}
+
+/* Hacker Theme */
+html.theme-hacker body {
+    background: #000 !important;
+    color: #0f0 !important;
+    font-family: "Courier New", Courier, monospace !important;
+}
+html.theme-hacker .hero-section::before {
+    display: none !important;
+}
+html.theme-hacker h1, 
+html.theme-hacker h2, 
+html.theme-hacker h3, 
+html.theme-hacker p, 
+html.theme-hacker span, 
+html.theme-hacker a {
+    color: #0f0 !important;
+    text-shadow: 0 0 5px #0f0 !important;
+    font-family: "Courier New", Courier, monospace !important;
+}
+html.theme-hacker .aero-content-box,
+html.theme-hacker .event-content,
+html.theme-hacker .release-card,
+html.theme-hacker .bbs-card {
+    background: rgba(0,20,0,0.9) !important;
+    border: 1px solid #0f0 !important;
+    box-shadow: 0 0 10px #0f0 !important;
+    backdrop-filter: none !important;
+}
+html.theme-hacker .aero-subtitle {
+    color: #0f0 !important;
+}

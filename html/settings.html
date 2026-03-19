@@ -4,9 +4,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>部員作品一覧 - CCCBC ホームページ</title>
-    <!-- Apply Settings Script -->
+    <title>サイト設定 - CCCBC ホームページ</title>
+    <!-- Apply Settings Script (Blocks rendering to prevent flicker) -->
     <script src="../assets/js/apply_settings.js"></script>
+
     <!-- Google Fonts: M PLUS Rounded 1c -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -16,86 +17,7 @@
     <!-- Three.js for 3D Logo -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <link rel="stylesheet" href="../assets/css/style.css">
-    <style>
-        .page-wrapper {
-            max-width: 1200px;
-            margin: 120px auto 40px;
-            padding: 0 20px;
-            position: relative;
-            z-index: 0;
-        }
-        .page-title {
-            text-align: center;
-            font-size: 2.5rem;
-            color: aliceblue;
-            margin-bottom: 40px;
-            font-family: 'M PLUS Rounded 1c', sans-serif;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
-        }
-        .works-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 30px;
-            margin-top: 30px;
-        }
-        .work-card {
-            border-radius: 20px;
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-            transition: transform 0.3s ease;
-            box-sizing: border-box;
-        }
-        .work-card:hover {
-            transform: translateY(-5px);
-        }
-        .work-image {
-            width: 100%;
-            height: 200px;
-            object-fit: cover;
-            border-bottom: 2px solid rgba(255, 255, 255, 0.2);
-        }
-        .work-info {
-            padding: 20px;
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-        }
-        .work-title {
-            font-size: 1.4rem;
-            color: aliceblue;
-            margin-bottom: 10px;
-            font-weight: 700;
-        }
-        .work-author {
-            font-size: 0.9rem;
-            color: #add8e6;
-            margin-bottom: 15px;
-            font-weight: 600;
-        }
-        .work-desc {
-            font-size: 0.95rem;
-            color: aliceblue;
-            line-height: 1.5;
-            margin-bottom: 20px;
-        }
-        .work-link {
-            display: inline-block;
-            padding: 8px 16px;
-            background: rgba(255, 255, 255, 0.2);
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            border-radius: 10px;
-            color: aliceblue;
-            text-decoration: none;
-            font-weight: 600;
-            transition: background 0.2s ease;
-            text-align: center;
-            margin-top: auto;
-        }
-        .work-link:hover {
-            background: rgba(255, 255, 255, 0.4);
-        }
-    </style>
+    <link rel="stylesheet" href="../assets/css/settings.css">
 </head>
 
 <body>
@@ -146,53 +68,112 @@
     </div>
 
     <main>
-        <div class="page-wrapper">
-            <h1 class="page-title">部員作品一覧</h1>
+        <div class="settings-wrapper">
+            <h1 class="settings-title">サイト設定</h1>
 
-            <div class="works-grid">
-                <!-- 仮の作品 1 -->
-                <div class="work-card aero-content-box" style="padding: 0;">
-                    <img src="../assets/images/sc1.webp" alt="Galaxy Defender" class="work-image" onerror="this.src='https://images.unsplash.com/photo-1550745165-9bc0b252726f?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80'">
-                    <div class="work-info">
-                        <h2 class="work-title">シューティングゲーム『Galaxy Defender』</h2>
-                        <div class="work-author">制作: 秋田航太朗</div>
-                        <p class="work-desc">高専祭で展示したUnity製の2Dシューティングゲームです。敵の弾幕パターンと爽快感にこだわって開発しました。</p>
-                        <a href="#" class="work-link">詳細を見る</a>
+            <!-- Lock Screen -->
+            <div id="lockScreen" class="lock-screen">
+                <div class="lock-box aero-content-box">
+                    <h2>🔒 管理者ログイン</h2>
+                    <p>このページは管理者専用です。</p>
+                    <input type="password" id="adminPassword" placeholder="パスワードを入力">
+                    <button id="loginBtn" class="aero-btn">ログイン</button>
+                    <p id="loginError" class="error-msg"></p>
+                </div>
+            </div>
+
+            <!-- Settings Content -->
+            <div id="settingsContent" style="display: none;">
+
+                <div class="aero-content-box setting-group">
+                    <h3>🎨 外観設定</h3>
+
+                    <div class="setting-item">
+                        <div class="setting-info">
+                            <div class="setting-label">テーマ</div>
+                            <div class="setting-desc">サイト全体のカラーテーマを変更します。</div>
+                        </div>
+                        <div class="setting-control">
+                            <select id="themeSelect">
+                                <option value="default">デフォルト (Frutiger Aero)</option>
+                                <option value="dark">ダークモード (Dark)</option>
+                                <option value="hacker">ハッカー (Hacker)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="setting-item">
+                        <div class="setting-info">
+                            <div class="setting-label">文字サイズ (<span id="fontSizeValue">100%</span>)</div>
+                            <div class="setting-desc">アクセシビリティのため、サイトの文字サイズを調整できます。</div>
+                        </div>
+                        <div class="setting-control">
+                            <input type="range" id="fontSizeRange" min="80" max="150" value="100" step="10">
+                        </div>
+                    </div>
+
+                    <div class="setting-item">
+                        <div class="setting-info">
+                            <div class="setting-label">カスタムカーソル</div>
+                            <div class="setting-desc">マウスカーソルのスタイルを変更します。</div>
+                        </div>
+                        <div class="setting-control">
+                            <select id="cursorSelect">
+                                <option value="default">デフォルト</option>
+                                <option value="crosshair">クロスヘア</option>
+                                <option value="wait">待機</option>
+                                <option value="help">ヘルプ</option>
+                            </select>
+                        </div>
                     </div>
                 </div>
 
-                <!-- 仮の作品 2 -->
-                <div class="work-card aero-content-box" style="padding: 0;">
-                    <img src="../assets/images/sc2.webp" alt="Timetable+" class="work-image" onerror="this.src='https://images.unsplash.com/photo-1498050108023-c5249f4df085?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80'">
-                    <div class="work-info">
-                        <h2 class="work-title">時間割管理アプリ『Timetable+』</h2>
-                        <div class="work-author">制作: A.K</div>
-                        <p class="work-desc">学生向けの時間割と課題を管理できるWebアプリです。ReactとFirebaseを使用してリアルタイム同期を実現しました。</p>
-                        <a href="#" class="work-link">詳細を見る</a>
+                <div class="aero-content-box setting-group">
+                    <h3>⚡ パフォーマンス</h3>
+
+                    <div class="setting-item">
+                        <div class="setting-info">
+                            <div class="setting-label">3Dロゴを無効化</div>
+                            <div class="setting-desc">動作が重い場合は、3Dロゴの描画を停止して負荷を軽減できます。</div>
+                        </div>
+                        <div class="setting-control">
+                            <input type="checkbox" id="disable3dCheck">
+                        </div>
                     </div>
                 </div>
 
-                <!-- 仮の作品 3 -->
-                <div class="work-card aero-content-box" style="padding: 0;">
-                    <img src="../assets/images/sc3.webp" alt="Discord Bot" class="work-image" onerror="this.src='https://images.unsplash.com/photo-1555949963-aa79dcee57d5?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80'">
-                    <div class="work-info">
-                        <h2 class="work-title">部内自動化Discord Bot</h2>
-                        <div class="work-author">制作: K.N</div>
-                        <p class="work-desc">部内の連絡やタスク管理を自動化するBotです。Python(discord.py)で実装し、サーバーの案内やロール付与を自動化しています。</p>
-                        <a href="#" class="work-link">詳細を見る</a>
+                <div class="aero-content-box setting-group">
+                    <h3>⚙️ 開発者情報</h3>
+
+                    <div class="setting-item">
+                        <div class="setting-info">
+                            <div class="setting-label">ユーザーエージェント</div>
+                            <div class="setting-desc" id="devUserAgent" style="word-break: break-all;">-</div>
+                        </div>
+                    </div>
+
+                    <div class="setting-item">
+                        <div class="setting-info">
+                            <div class="setting-label">画面解像度</div>
+                            <div class="setting-desc" id="devScreen">-</div>
+                        </div>
                     </div>
                 </div>
 
-                <!-- 仮の作品 4 -->
-                <div class="work-card aero-content-box" style="padding: 0;">
-                    <img src="../assets/images/sc4.webp" alt="特設サイト" class="work-image" onerror="this.src='https://images.unsplash.com/photo-1517694712202-14dd9538aa97?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80'">
-                    <div class="work-info">
-                        <h2 class="work-title">高専祭 特設宣伝サイト</h2>
-                        <div class="work-author">制作: デザイン・フロントエンド班</div>
-                        <p class="work-desc">昨年の高専祭での同好会ブースを宣伝するための特設ウェブサイトです。Frutiger Aeroデザインを取り入れています。</p>
-                        <a href="#" class="work-link">詳細を見る</a>
+                <div class="aero-content-box setting-group">
+                    <h3>🗑️ データ管理</h3>
+
+                    <div class="setting-item">
+                        <div class="setting-info">
+                            <div class="setting-label">ローカルデータの初期化</div>
+                            <div class="setting-desc">設定やBBSのローカル名などをすべてリセットします。</div>
+                        </div>
+                        <div class="setting-control">
+                            <button id="clearDataBtn" class="aero-btn danger">初期化する</button>
+                        </div>
                     </div>
                 </div>
+
             </div>
         </div>
 
@@ -210,6 +191,8 @@
     <!-- ページトップボタン -->
     <button id="pageTop"
         style="position: fixed; bottom: 30px; right: calc(max((100vw - 1500px) / 2, 0px) + 20px);">PageTop</button>
+
+    <script src="../assets/js/settings.js"></script>
 
     <script>
         // 本物のアクセス数を取得して更新

@@ -1,0 +1,179 @@
+.settings-wrapper {
+    max-width: 800px;
+    margin: 50px auto;
+    padding: 20px;
+    position: relative;
+}
+
+.settings-title {
+    text-align: center;
+    color: white;
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+    margin-bottom: 30px;
+}
+
+.lock-screen {
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(10px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.lock-box {
+    text-align: center;
+    padding: 40px;
+    border-radius: 20px;
+    width: 90%;
+    max-width: 400px;
+}
+
+.lock-box h2 { color: white; margin-bottom: 10px; }
+.lock-box p { color: #f0f0f0; margin-bottom: 20px; }
+.lock-box input {
+    width: 100%;
+    padding: 10px;
+    border-radius: 10px;
+    border: 1px solid rgba(255,255,255,0.3);
+    background: rgba(255,255,255,0.1);
+    color: white;
+    margin-bottom: 15px;
+    box-sizing: border-box;
+    font-size: 16px;
+}
+
+.error-msg { 
+    color: #ff6b6b; 
+    margin-top: 15px; 
+    display: none; 
+    font-weight: bold;
+}
+
+.aero-btn {
+    background: linear-gradient(135deg, rgba(255,255,255,0.4), rgba(255,255,255,0.1));
+    border: 1px solid rgba(255,255,255,0.5);
+    color: white;
+    padding: 10px 20px;
+    border-radius: 30px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: all 0.3s ease;
+    width: 100%;
+    font-size: 16px;
+}
+.aero-btn:hover {
+    background: linear-gradient(135deg, rgba(255,255,255,0.6), rgba(255,255,255,0.2));
+    box-shadow: 0 0 15px rgba(255,255,255,0.5);
+}
+.aero-btn.danger {
+    background: linear-gradient(135deg, rgba(255,107,107,0.4), rgba(255,107,107,0.1));
+    border-color: rgba(255,107,107,0.5);
+}
+.aero-btn.danger:hover {
+    background: linear-gradient(135deg, rgba(255,107,107,0.6), rgba(255,107,107,0.2));
+    box-shadow: 0 0 15px rgba(255,107,107,0.5);
+}
+
+.setting-group {
+    margin-bottom: 30px;
+}
+.setting-group h3 {
+    color: white;
+    border-bottom: 2px solid rgba(255,255,255,0.2);
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+}
+
+.setting-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+.setting-item:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+    padding-bottom: 0;
+}
+
+.setting-label {
+    color: white;
+    font-size: 1.1rem;
+    font-weight: bold;
+}
+.setting-desc {
+    color: #ddd;
+    font-size: 0.9rem;
+    margin-top: 5px;
+    line-height: 1.4;
+}
+
+.setting-control select {
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.3);
+    color: white;
+    padding: 8px 15px;
+    border-radius: 10px;
+    width: 200px;
+    font-size: 1rem;
+    appearance: none;
+    outline: none;
+}
+.setting-control select option {
+    background: #333;
+    color: white;
+}
+
+.setting-control input[type="range"] {
+    width: 200px;
+    accent-color: #00d2ff;
+}
+
+.setting-control input[type="checkbox"] {
+    width: 20px;
+    height: 20px;
+    accent-color: #00d2ff;
+    cursor: pointer;
+}
+
+/* Theme overrides */
+html.theme-dark body {
+    background: #121212 !important;
+}
+html.theme-dark .hero-section::before {
+    opacity: 0.1 !important;
+}
+html.theme-dark .aero-content-box {
+    background: rgba(30,30,30,0.7) !important;
+    border-color: rgba(255,255,255,0.1) !important;
+}
+
+html.theme-hacker body {
+    background: #000 !important;
+    color: #0f0 !important;
+    font-family: monospace !important;
+}
+html.theme-hacker .hero-section::before {
+    display: none !important;
+}
+html.theme-hacker h1, 
+html.theme-hacker h2, 
+html.theme-hacker h3, 
+html.theme-hacker p, 
+html.theme-hacker span, 
+html.theme-hacker a {
+    color: #0f0 !important;
+    text-shadow: 0 0 5px #0f0 !important;
+    font-family: monospace !important;
+}
+html.theme-hacker .aero-content-box {
+    background: rgba(0,20,0,0.8) !important;
+    border: 1px solid #0f0 !important;
+    box-shadow: 0 0 10px #0f0 !important;
+    backdrop-filter: none !important;
+}
