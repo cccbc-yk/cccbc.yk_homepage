@@ -125,6 +125,10 @@
                     <label>内容:</label>
                     <textarea id="postContent" required rows="5" placeholder="投稿内容を入力してください"></textarea>
                 </div>
+                <div class="form-group">
+                    <label>削除用パスワード (任意):</label>
+                    <input type="password" id="postPassword" placeholder="投稿を削除する際に使用します">
+                </div>
                 <button type="submit" class="bbs-btn primary-btn submit-btn">投稿する</button>
             </form>
         </div>
@@ -259,7 +263,7 @@
         // Firebase 連携とページネーション
         // ==========================================
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.10.0/firebase-app.js";
-        import { getFirestore, collection, addDoc, query, orderBy, onSnapshot, doc, updateDoc, arrayUnion } from "https://www.gstatic.com/firebasejs/10.10.0/firebase-firestore.js";
+        import { getFirestore, collection, addDoc, query, orderBy, onSnapshot, doc, updateDoc, arrayUnion, deleteDoc } from "https://www.gstatic.com/firebasejs/10.10.0/firebase-firestore.js";
 
         // ▼ユーザー設定: Firebaseコンソールのプロジェクト情報に書き換えてください▼
         const firebaseConfig = {
@@ -361,6 +365,7 @@
                         </div>
                         <div class="bbs-stats">
                             <span class="stat comment-btn" data-id="${post.id}" style="cursor: pointer;" title="コメントを表示する">💬 ${commentsCount}</span>
+                            <span class="stat delete-btn" data-id="${post.id}" style="cursor: pointer; opacity: 0.8;" title="この投稿を削除する">🗑️</span>
                             <span class="stat">👀 <span style="font-size:0.8em;">--</span></span>
                         </div>
                     </div>
@@ -379,7 +384,7 @@
                 `;
 
                 card.addEventListener('click', (e) => {
-                    if (e.target.closest('button') || e.target.closest('input') || e.target.closest('.bbs-comments-section') || e.target.closest('.comment-btn')) {
+                    if (e.target.closest('button') || e.target.closest('input') || e.target.closest('.bbs-comments-section') || e.target.closest('.comment-btn') || e.target.closest('.delete-btn')) {
                         return;
                     }
                     card.classList.toggle('expanded');
@@ -396,6 +401,7 @@
 
             renderPagination(totalPages);
             setupCommentToggles();
+            setupDeleteButtons();
         };
 
         const renderPagination = (totalPages) => {
@@ -458,6 +464,42 @@
                     }
                 });
             });
+        };
+
+        const setupDeleteButtons = () => {
+            document.querySelectorAll('.delete-btn').forEach(btn => {
+                btn.addEventListener('click', async (e) => {
+                    e.stopPropagation();
+                    const postId = btn.getAttribute('data-id');
+                    const post = allPostsFirebase.find(p => p.id === postId);
+                    if (!post) return;
+
+                    const userInput = prompt("この投稿を削除するためのパスワードを入力してください:\n");
+                    if (userInput === null) return;
+
+                    if (post.deletePassword && post.deletePassword === userInput) {
+                        if (confirm("本当にこの投稿と関連するコメントをすべて削除しますか？")) {
+                            await deletePostDoc(postId);
+                        }
+                    } else if (userInput === "admin") {
+                        if (confirm("管理者権限で削除しますか？")) {
+                            await deletePostDoc(postId);
+                        }
+                    } else {
+                        alert("パスワードが違います。");
+                    }
+                });
+            });
+        };
+
+        const deletePostDoc = async (postId) => {
+            try {
+                await deleteDoc(doc(db, "bbs_posts", postId));
+                alert("投稿を削除しました。");
+            } catch (error) {
+                console.error("削除エラー: ", error);
+                alert("データの削除に失敗しました。通信環境やセキュリティ設定をご確認ください。");
+            }
         };
 
         // Firebase リアルタイムデータ取得のセットアップ
@@ -545,6 +587,7 @@
                 const title = document.getElementById('postTitle').value;
                 const author = document.getElementById('postAuthor').value;
                 const content = document.getElementById('postContent').value;
+                const deletePassword = document.getElementById('postPassword') ? document.getElementById('postPassword').value : "";
 
                 const now = new Date();
                 const dateStr =
@@ -560,6 +603,7 @@
                         title,
                         author,
                         content,
+                        deletePassword,
                         date: dateStr,
                         createdAt: Date.now(),
                         comments: []
