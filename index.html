@@ -241,7 +241,9 @@
         <section class="footer"></section>
     </main>
 
+    <script src="assets/js/header_manager.js"></script>
     <script src="assets/js/footer.js"></script>
+
     <script src="assets/js/logo_3d.js"></script>
     <script>
         // 本物のアクセス数を取得して更新
@@ -287,6 +289,8 @@
         updateRealAccessCount(); // ページ読み込み時に実行
 
         // Canvas要素が未使用の場合は非表示にする（あるいは削除）
+
+
         const headerCanvas = document.getElementById('headerCanvas');
         if (headerCanvas) headerCanvas.style.display = 'none';
 

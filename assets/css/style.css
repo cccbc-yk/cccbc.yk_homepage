@@ -238,6 +238,38 @@ body::before {
     letter-spacing: 0.05em;
 }
 
+/* --- Dynamic Header Buttons --- */
+.header-btn {
+    position: absolute;
+    width: 60px;
+    height: 60px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    z-index: 10;
+}
+
+.header-btn img {
+    width: 45px; /* 少し大きくする */
+    height: 45px;
+    object-fit: contain;
+    filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.4));
+    transition: all 0.4s ease;
+}
+
+.header-btn:hover {
+    transform: scale(1.2) translateY(-4px);
+}
+
+.header-btn:hover img {
+    filter: drop-shadow(0 0 15px rgba(0, 210, 255, 0.8));
+    transform: rotate(5deg);
+}
+
+
+
 /* --- Main Content --- */
 main {
     padding-top: 15vh;
