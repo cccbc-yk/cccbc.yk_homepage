@@ -212,6 +212,7 @@
 .bbs-tag.idea { background: linear-gradient(135deg, #ffb300, #ff8c00); }
 .bbs-tag.question { background: linear-gradient(135deg, #00d2ff, #0077ff); }
 .bbs-tag.report { background: linear-gradient(135deg, #00e676, #00c853); }
+.bbs-tag.chat { background: linear-gradient(135deg, #d24dff, #9900ff); }
 
 .bbs-date {
     font-size: 0.85rem;

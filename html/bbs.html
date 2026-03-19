@@ -110,6 +110,7 @@
                         <option value="idea">アイデア</option>
                         <option value="question">質問</option>
                         <option value="report">進捗報告</option>
+                        <option value="chat">雑談</option>
                     </select>
                 </div>
                 <div class="form-group">
@@ -323,6 +324,7 @@
                 else if (post.tag === 'idea') tagText = 'アイデア';
                 else if (post.tag === 'question') tagText = '質問';
                 else if (post.tag === 'report') tagText = '進捗報告';
+                else if (post.tag === 'chat') tagText = '雑談';
 
                 const iconClasses = ['admin', 'member-1', 'member-2', 'member-3'];
                 const randomIcon = iconClasses[Math.abs((post.author || '').length) % iconClasses.length] || 'member-1';
