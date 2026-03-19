@@ -54,7 +54,7 @@
     <div class="menu-panel" id="menuPanel">
         <a href="../index.html">ホーム</a>
         <a href="../index.html#about">同好会紹介</a>
-        <a href="#">部員紹介</a>
+        <a href="./members.html">部員紹介</a>
         <a href="#">部員作品一覧</a>
         <a href="../index.html#activity">活動実績</a>
         <a href="../index.html#release-notes">リリースノート</a>
@@ -375,6 +375,20 @@
                         </form>
                     </div>
                 `;
+
+                card.addEventListener('click', (e) => {
+                    if (e.target.closest('button') || e.target.closest('input') || e.target.closest('.bbs-comments-section') || e.target.closest('.comment-btn')) {
+                        return;
+                    }
+                    card.classList.toggle('expanded');
+                    const commentsSec = document.getElementById(`comments-${post.id}`);
+                    if (card.classList.contains('expanded')) {
+                        commentsSec.style.display = 'block';
+                    } else {
+                        commentsSec.style.display = 'none';
+                    }
+                });
+
                 bbsList.appendChild(card);
             });
 
@@ -432,10 +446,13 @@
                 btn.addEventListener('click', (e) => {
                     const postId = btn.getAttribute('data-id');
                     const commentsSec = document.getElementById(`comments-${postId}`);
+                    const card = btn.closest('.bbs-card');
                     if (commentsSec.style.display === 'none') {
                         commentsSec.style.display = 'block';
+                        if (card) card.classList.add('expanded');
                     } else {
                         commentsSec.style.display = 'none';
+                        if (card) card.classList.remove('expanded');
                     }
                 });
             });

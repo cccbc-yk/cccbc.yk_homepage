@@ -243,6 +243,13 @@
     overflow: hidden;
 }
 
+.bbs-card.expanded .bbs-post-excerpt {
+    display: block;
+    -webkit-line-clamp: unset;
+    line-clamp: unset;
+    overflow: visible;
+}
+
 .bbs-card-footer {
     display: flex;
     justify-content: space-between;
