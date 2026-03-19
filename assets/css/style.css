@@ -882,4 +882,17 @@ html.theme-hacker .bbs-card {
 }
 html.theme-hacker .aero-subtitle {
     color: #0f0 !important;
-}
+}
+
+/* --- Footer --- */
+.footer {
+    padding: 40px 20px;
+    margin-top: 50px;
+}
+
+.footer-content {
+    color: aliceblue;
+    font-size: 0.9rem;
+    line-height: 1.6;
+}
+
