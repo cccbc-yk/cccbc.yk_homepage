@@ -1,0 +1,54 @@
+mutation SeedData @transaction @auth(level: USER, insecureReason: "Seed data mutations should only be callable by authenticated users for development purposes.") {
+  user_insertMany(data: [
+    {
+      id: "d9e8b7c6-5a4b-3c2d-1e0f-9a8b7c6d5e4f",
+      username: "john_doe",
+      email: "john.doe@example.com",
+      displayName: "John Doe",
+      createdAt: "2023-01-01T10:00:00Z"
+    },
+    {
+      id: "f1e0d9c8-7b6a-5d4c-3b2a-1f0e9d8c7b6a",
+      username: "jane_smith",
+      email: "jane.smith@example.com",
+      displayName: "Jane Smith",
+      createdAt: "2023-01-02T11:00:00Z"
+    }
+  ])
+  post_insertMany(data: [
+    {
+      id: "a1b2c3d4-e5f6-7a8b-9c0d-1e2f3a4b5c6d",
+      authorId: "d9e8b7c6-5a4b-3c2d-1e0f-9a8b7c6d5e4f",
+      title: "My First Post",
+      content: "This is the content of my first post.",
+      createdAt: "2023-01-03T12:00:00Z",
+      updatedAt: "2023-01-03T12:00:00Z"
+    },
+    {
+      id: "b2c3d4e5-f6a7-8b9c-0d1e-2f3a4b5c6d7e",
+      authorId: "f1e0d9c8-7b6a-5d4c-3b2a-1f0e9d8c7b6a",
+      title: "Hello World from Jane",
+      content: "A quick hello from Jane's new blog!",
+      createdAt: "2023-01-04T13:00:00Z",
+      updatedAt: "2023-01-04T13:00:00Z"
+    }
+  ])
+  comment_insertMany(data: [
+    {
+      id: "c3d4e5f6-a7b8-9c0d-1e2f-3a4b5c6d7e8f",
+      postId: "a1b2c3d4-e5f6-7a8b-9c0d-1e2f3a4b5c6d",
+      authorId: "f1e0d9c8-7b6a-5d4c-3b2a-1f0e9d8c7b6a",
+      content: "Great first post, John!",
+      createdAt: "2023-01-03T12:30:00Z",
+      updatedAt: "2023-01-03T12:30:00Z"
+    },
+    {
+      id: "d4e5f6a7-b8c9-0d1e-2f3a-4b5c6d7e8f0a",
+      postId: "b2c3d4e5-f6a7-8b9c-0d1e-2f3a4b5c6d7e",
+      authorId: "d9e8b7c6-5a4b-3c2d-1e0f-9a8b7c6d5e4f",
+      content: "Welcome to the blogging world, Jane!",
+      createdAt: "2023-01-04T13:15:00Z",
+      updatedAt: "2023-01-04T13:15:00Z"
+    }
+  ])
+}

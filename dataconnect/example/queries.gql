@@ -1,0 +1,55 @@
+# 1. Query to get a user's profile by their ID (accessible to all logged-in users)
+query GetUserProfile($id: UUID!) @auth(level: USER, insecureReason: "This operation is safe to expose to all logged in users.") {
+  user(id: $id) {
+    id
+    username
+    displayName
+    email
+    createdAt
+  }
+}
+
+# 2. Mutation to create a new post (only accessible to non-anonymous logged-in users)
+mutation CreatePost($title: String!, $content: String!) @auth(expr: "auth.uid != nil && auth.token.firebase.sign_in_provider != 'anonymous'") {
+  post_insert(
+    data: {
+      title: $title,
+      content: $content,
+      authorId_expr: "auth.uid",
+      createdAt_expr: "request.time",
+      updatedAt_expr: "request.time"
+    }
+  ) {
+    id
+  }
+}
+
+# 3. Query to list all posts, with their authors (publicly accessible)
+query ListAllPosts @auth(level: PUBLIC, insecureReason: "This operation is safe to expose to the public") {
+  posts {
+    id
+    title
+    content
+    createdAt
+    author {
+      id
+      username
+      displayName
+    }
+  }
+}
+
+# 4. Mutation to add a comment to a post (accessible to all logged-in users)
+mutation AddCommentToPost($postId: UUID!, $content: String!) @auth(level: USER) {
+  comment_insert(
+    data: {
+      postId: $postId,
+      content: $content,
+      authorId_expr: "auth.uid",
+      createdAt_expr: "request.time",
+      updatedAt_expr: "request.time"
+    }
+  ) {
+    id
+  }
+}

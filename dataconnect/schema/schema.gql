@@ -1,0 +1,22 @@
+type User @table {
+  username: String!
+  email: String
+  displayName: String
+  createdAt: Timestamp!
+}
+
+type Post @table {
+  title: String!
+  content: String!
+  createdAt: Timestamp!
+  updatedAt: Timestamp!
+  author: User
+}
+
+type Comment @table {
+  content: String!
+  createdAt: Timestamp!
+  updatedAt: Timestamp!
+  author: User
+  post: Post
+}

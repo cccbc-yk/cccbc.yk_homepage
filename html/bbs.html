@@ -133,7 +133,7 @@
     <button id="pageTop"
         style="position: fixed; bottom: 30px; right: calc(max((100vw - 1500px) / 2, 0px) + 20px);">PageTop</button>
 
-    <script>
+    <script type="module">
         // 本物のアクセス数を取得して更新
         async function updateRealAccessCount() {
             const el = document.getElementById('accessCount');
@@ -154,10 +154,13 @@
         // 時刻・ステータスの更新
         function updateStats() {
             const now = new Date();
-            document.getElementById('currentTime').textContent =
-                now.getHours().toString().padStart(2, '0') + ':' +
-                now.getMinutes().toString().padStart(2, '0') + ':' +
-                now.getSeconds().toString().padStart(2, '0');
+            const elTime = document.getElementById('currentTime');
+            if (elTime) {
+                elTime.textContent =
+                    now.getHours().toString().padStart(2, '0') + ':' +
+                    now.getMinutes().toString().padStart(2, '0') + ':' +
+                    now.getSeconds().toString().padStart(2, '0');
+            }
 
             // アンテナの演出: 基本4本、たまに3本
             const bar4 = document.getElementById('bar-4');
@@ -178,10 +181,12 @@
         const earthBtn = document.getElementById('header-earth-part');
         const menuPanel = document.getElementById('menuPanel');
 
-        earthBtn.addEventListener('click', () => {
-            menuPanel.classList.toggle('open');
-            earthBtn.classList.toggle('active');
-        });
+        if (earthBtn && menuPanel) {
+            earthBtn.addEventListener('click', () => {
+                menuPanel.classList.toggle('open');
+                earthBtn.classList.toggle('active');
+            });
+        }
 
         document.addEventListener('click', async (e) => {
             const link = e.target.closest('a');
@@ -190,13 +195,12 @@
             const href = link.getAttribute('href');
             if (href === '#' || !href) {
                 e.preventDefault();
-                // window.location.href = '../404.html';
                 return;
             }
         });
 
         document.addEventListener('click', (e) => {
-            if (earthBtn && !earthBtn.contains(e.target) && !menuPanel.contains(e.target)) {
+            if (earthBtn && !earthBtn.contains(e.target) && menuPanel && !menuPanel.contains(e.target)) {
                 menuPanel.classList.remove('open');
                 earthBtn.classList.remove('active');
             }
@@ -238,6 +242,7 @@
         });
 
         const escapeHTML = (str) => {
+            if (!str) return '';
             return str.replace(/[&<>'"]/g,
                 tag => ({
                     '&': '&amp;',
@@ -249,50 +254,45 @@
             );
         };
 
-        // --- 掲示板データの初期化とページネーション ---
+        // ==========================================
+        // Firebase 連携とページネーション
+        // ==========================================
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.10.0/firebase-app.js";
+        import { getFirestore, collection, addDoc, query, orderBy, onSnapshot, doc, updateDoc, arrayUnion } from "https://www.gstatic.com/firebasejs/10.10.0/firebase-firestore.js";
+
+        // ▼ユーザー設定: Firebaseコンソールのプロジェクト情報に書き換えてください▼
+        const firebaseConfig = {
+            apiKey: "AIzaSyDrSlOu08CDXbMBGRYRKPTBOMQIn6HQ8LI",
+            authDomain: "cccbc-yk.firebaseapp.com",
+            projectId: "cccbc-yk",
+            storageBucket: "cccbc-yk.firebasestorage.app",
+            messagingSenderId: "230911510682",
+            appId: "1:230911510682:web:ad3b21c500ddb47e5ab723",
+            measurementId: "G-4V85ZFR53W"
+        };
+        // ▲ここまで▲
+
+        let db = null;
+        try {
+            const app = initializeApp(firebaseConfig);
+            db = getFirestore(app);
+        } catch (e) {
+            console.error("Firebase initialization failed:", e);
+        }
+
         const ITEMS_PER_PAGE = 5;
         let currentPage = 1;
-
-        const initializeDummyData = () => {
-            let posts = JSON.parse(localStorage.getItem('bbs_posts'));
-            if (!posts || posts.length === 0) {
-                posts = [];
-                // 既存の4つのダミーデータ
-                const defaultPosts = [
-                    { id: 1, tag: 'important', title: '春のプログラミング合宿のお知らせ', author: '部長', content: '今年の春休みは恒例の開発合宿を行います！参加希望者はスレッド内のフォームから詳細を確認してください。', date: '2026/03/18 10:00', comments: [{ id: 1, author: 'テスト部員', content: '了解しました！楽しみにしています。', date: '2026/03/18 10:30' }] },
-                    { id: 2, tag: 'idea', title: '文化祭の展示アプリについてブレスト', author: '副部長', content: '今年の文化祭で展示するアプリのアイデアを募集します。今のところ、校内探索系のゲームが候補に挙がっていますが...', date: '2026/03/17 21:30', comments: [] },
-                    { id: 3, tag: 'question', title: 'Unityでのシェーダー作成について教えてください', author: '1年生部員A', content: '水面の表現を作りたいのですが、Shader Graphでうまく波の動きが作れません。どなたか詳しい方いませんか？', date: '2026/03/15 14:15', comments: [] },
-                    { id: 4, tag: 'report', title: 'コンフェス用ゲーム「Cyber Glide」アルファ版完成', author: '2年生部員C', content: 'チームBです！ようやく基本動作とステージ1が遊べる状態になりました。テストプレイしてくれる人を募集します！', date: '2026/03/10 18:45', comments: [] }
-                ];
-                posts.push(...defaultPosts);
-                
-                // 更にダミーデータを追加生成 (計40件にしてページネーションを意味のあるものにする)
-                const tags = ['important', 'idea', 'question', 'report'];
-                const titles = ['新しいサーバーの構築について', '次回の部会アジェンダ', 'デザインコンペの募集', 'Gitの使い方講座やります', '部室のネットワーク障害について', 'おすすめの技術書紹介', 'ハッカソン出場メンバー募集', 'C++のポインタがわからない', 'React vs Vue どっちがいい？', '部室の掃除当番表'];
-                const authors = ['部長', '副部長', '1年生部員A', '2年生部員C', '顧問', '3年生部員B'];
-                
-                let idCounter = 5;
-                for (let i = 0; i < 36; i++) {
-                    const tag = tags[Math.floor(Math.random() * tags.length)];
-                    const title = titles[Math.floor(Math.random() * titles.length)] + ' ' + (i + 1);
-                    const author = authors[Math.floor(Math.random() * authors.length)];
-                    const date = `2026/03/${String(Math.floor(Math.random() * 10) + 1).padStart(2, '0')} 12:00`;
-                    posts.push({ id: idCounter++, tag, title, author, content: 'これは自動生成されたダミーテキストです。ページネーションのテスト用データです。', date, comments: [] });
-                }
-                
-                localStorage.setItem('bbs_posts', JSON.stringify(posts));
-            }
-            return posts;
-        };
+        let allPostsFirebase = [];
+        let currentSearchKeyword = '';
 
         const loadPosts = (filterKeyword = '') => {
+            currentSearchKeyword = filterKeyword.toLowerCase();
             if (!bbsList) return;
-            const allPosts = initializeDummyData();
-            
+
             // フィルタリング
-            const filteredPosts = filterKeyword 
-                ? allPosts.filter(p => p.title.toLowerCase().includes(filterKeyword) || p.content.toLowerCase().includes(filterKeyword))
-                : allPosts;
+            const filteredPosts = currentSearchKeyword
+                ? allPostsFirebase.filter(p => (p.title && p.title.toLowerCase().includes(currentSearchKeyword)) || (p.content && p.content.toLowerCase().includes(currentSearchKeyword)))
+                : allPostsFirebase;
 
             const totalPages = Math.ceil(filteredPosts.length / ITEMS_PER_PAGE) || 1;
             if (currentPage > totalPages) currentPage = totalPages;
@@ -302,6 +302,17 @@
             const displayPosts = filteredPosts.slice(startIndex, startIndex + ITEMS_PER_PAGE);
 
             bbsList.innerHTML = '';
+
+            if (filteredPosts.length === 0) {
+                // 初回読み込み前・データなしの場合
+                if (db && firebaseConfig.apiKey !== "YOUR_API_KEY") {
+                    bbsList.innerHTML = '<p style="text-align:center; padding: 20px;">投稿がありません。</p>';
+                } else if (!db || firebaseConfig.apiKey === "YOUR_API_KEY") {
+                    bbsList.innerHTML = '<p style="text-align:center; padding: 20px; color: #ffcccc;">※Firebaseの初期設定が完了していません。bbs.html の firebaseConfig を書き換えてください。</p>';
+                }
+                renderPagination(0);
+                return;
+            }
 
             displayPosts.forEach(post => {
                 const card = document.createElement('div');
@@ -314,20 +325,20 @@
                 else if (post.tag === 'report') tagText = '進捗報告';
 
                 const iconClasses = ['admin', 'member-1', 'member-2', 'member-3'];
-                const randomIcon = iconClasses[Math.abs(post.author.length) % iconClasses.length];
+                const randomIcon = iconClasses[Math.abs((post.author || '').length) % iconClasses.length] || 'member-1';
 
                 const commentsCount = post.comments ? post.comments.length : 0;
-                
+
                 // コメントHTML生成
                 let commentsHTML = '';
                 if (post.comments && post.comments.length > 0) {
                     commentsHTML = post.comments.map(c => `
                         <div class="bbs-comment-item">
                             <div class="comment-header">
-                                <span class="comment-author">${escapeHTML(c.author)}</span>
-                                <span class="comment-date">${c.date}</span>
+                                <span class="comment-author">${escapeHTML(c.author || '')}</span>
+                                <span class="comment-date">${c.date || ''}</span>
                             </div>
-                            <div class="comment-body">${escapeHTML(c.content).replace(/\n/g, '<br>')}</div>
+                            <div class="comment-body">${escapeHTML(c.content || '').replace(/\n/g, '<br>')}</div>
                         </div>
                     `).join('');
                 } else {
@@ -348,16 +359,16 @@
                         </div>
                         <div class="bbs-stats">
                             <span class="stat comment-btn" data-id="${post.id}" style="cursor: pointer;" title="コメントを表示する">💬 ${commentsCount}</span>
-                            <span class="stat">👀 ${Math.floor(Math.random() * 100) + 10}</span>
+                            <span class="stat">👀 <span style="font-size:0.8em;">--</span></span>
                         </div>
                     </div>
                     
-                    <!-- コメントセクション (デフォルトは非表示) -->
+                    <!-- コメントセクション -->
                     <div class="bbs-comments-section" id="comments-${post.id}" style="display: none;">
                         <div class="bbs-comment-list">
                             ${commentsHTML}
                         </div>
-                        <form class="bbs-comment-form" onsubmit="submitComment(event, ${post.id})">
+                        <form class="bbs-comment-form" onsubmit="submitComment(event, '${post.id}')">
                             <input type="text" class="comment-name-input" placeholder="名前" required maxlength="20">
                             <input type="text" class="comment-text-input" placeholder="コメントを入力..." required maxlength="200">
                             <button type="submit" class="bbs-btn primary-btn small-btn">送信</button>
@@ -366,8 +377,7 @@
                 `;
                 bbsList.appendChild(card);
             });
-            
-            // ページネーション描画
+
             renderPagination(totalPages);
             setupCommentToggles();
         };
@@ -375,9 +385,9 @@
         const renderPagination = (totalPages) => {
             const paginationContainer = document.querySelector('.bbs-pagination');
             if (!paginationContainer) return;
-            
+
             paginationContainer.innerHTML = '';
-            
+
             if (totalPages <= 1) return;
 
             const makeBtn = (pageNum, text) => {
@@ -386,7 +396,7 @@
                 btn.textContent = text || pageNum;
                 btn.onclick = () => {
                     currentPage = pageNum;
-                    loadPosts(searchInput ? searchInput.value.toLowerCase() : '');
+                    loadPosts(searchInput ? searchInput.value : '');
                     window.scrollTo({ top: 0, behavior: "smooth" });
                 };
                 return btn;
@@ -399,47 +409,76 @@
                 return span;
             };
 
-            // 先頭ページ
             paginationContainer.appendChild(makeBtn(1));
 
-            // 中間ページ
             let startPage = Math.max(2, currentPage - 2);
             let endPage = Math.min(totalPages - 1, currentPage + 2);
-            
+
             if (startPage > 2) paginationContainer.appendChild(makeDots());
-            
+
             for (let i = startPage; i <= endPage; i++) {
                 paginationContainer.appendChild(makeBtn(i));
             }
-            
+
             if (endPage < totalPages - 1) paginationContainer.appendChild(makeDots());
 
-            // 末尾ページ
             if (totalPages > 1) {
                 paginationContainer.appendChild(makeBtn(totalPages));
             }
         };
 
         const setupCommentToggles = () => {
-             document.querySelectorAll('.comment-btn').forEach(btn => {
-                 btn.addEventListener('click', (e) => {
-                     const postId = btn.getAttribute('data-id');
-                     const commentsSec = document.getElementById(`comments-${postId}`);
-                     if (commentsSec.style.display === 'none') {
-                         commentsSec.style.display = 'block';
-                     } else {
-                         commentsSec.style.display = 'none';
-                     }
-                 });
-             });
+            document.querySelectorAll('.comment-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const postId = btn.getAttribute('data-id');
+                    const commentsSec = document.getElementById(`comments-${postId}`);
+                    if (commentsSec.style.display === 'none') {
+                        commentsSec.style.display = 'block';
+                    } else {
+                        commentsSec.style.display = 'none';
+                    }
+                });
+            });
         };
 
-        window.submitComment = (e, postId) => {
+        // Firebase リアルタイムデータ取得のセットアップ
+        if (db && firebaseConfig.apiKey !== "YOUR_API_KEY") {
+            const postsCollection = collection(db, "bbs_posts");
+            const postsQuery = query(postsCollection, orderBy("createdAt", "desc"));
+
+            onSnapshot(postsQuery, (snapshot) => {
+                allPostsFirebase = [];
+                snapshot.forEach((docSnap) => {
+                    allPostsFirebase.push({ id: docSnap.id, ...docSnap.data() });
+                });
+                loadPosts(searchInput ? searchInput.value : '');
+            }, (error) => {
+                console.error("Firebase listen error:", error);
+                if (bbsList) {
+                    bbsList.innerHTML = `<p style="text-align:center; padding: 20px; color: #ffcccc;">データの読み込みに失敗しました。</p>`;
+                }
+            });
+        } else {
+            // 初期状態、設定未完了メッセージを表示
+            loadPosts('');
+        }
+
+        // コメント送信処理 (HTMLからの呼び出し用にwindowに用意)
+        window.submitComment = async (e, postId) => {
             e.preventDefault();
+            if (!db || firebaseConfig.apiKey === "YOUR_API_KEY") {
+                alert("Firebaseの設定が完了していません。投稿機能は無効になっています。");
+                return;
+            }
+
             const form = e.target;
+            const btn = form.querySelector('button[type="submit"]');
+            btn.disabled = true;
+            btn.textContent = "送信中...";
+
             const author = form.querySelector('.comment-name-input').value;
             const content = form.querySelector('.comment-text-input').value;
-            
+
             const now = new Date();
             const dateStr =
                 now.getFullYear() + '/' +
@@ -448,32 +487,41 @@
                 String(now.getHours()).padStart(2, '0') + ':' +
                 String(now.getMinutes()).padStart(2, '0');
 
-            const allPosts = JSON.parse(localStorage.getItem('bbs_posts')) || [];
-            const postIndex = allPosts.findIndex(p => p.id === postId);
-            
-            if (postIndex !== -1) {
-                if (!allPosts[postIndex].comments) {
-                    allPosts[postIndex].comments = [];
-                }
-                allPosts[postIndex].comments.push({
-                    id: Date.now(),
-                    author,
-                    content,
-                    date: dateStr
+            const postRef = doc(db, "bbs_posts", postId);
+
+            try {
+                await updateDoc(postRef, {
+                    comments: arrayUnion({
+                        id: Date.now().toString(),
+                        author,
+                        content,
+                        date: dateStr,
+                        createdAt: Date.now()
+                    })
                 });
-                localStorage.setItem('bbs_posts', JSON.stringify(allPosts));
-                
-                const searchVal = searchInput ? searchInput.value.toLowerCase() : '';
-                loadPosts(searchVal);
-                
-                const commentsSec = document.getElementById(`comments-${postId}`);
-                if (commentsSec) commentsSec.style.display = 'block';
+                form.reset();
+            } catch (error) {
+                console.error("Error adding comment: ", error);
+                alert("コメントの送信に失敗しました。(セキュリティルールの設定等をご確認ください)");
+            } finally {
+                btn.disabled = false;
+                btn.textContent = "送信";
             }
         };
 
+        // 新規投稿処理
         if (postForm) {
-            postForm.addEventListener('submit', (e) => {
+            postForm.addEventListener('submit', async (e) => {
                 e.preventDefault();
+                if (!db || firebaseConfig.apiKey === "YOUR_API_KEY") {
+                    alert("Firebaseの設定が完了していません。投稿機能は無効になっています。");
+                    return;
+                }
+
+                const btn = postForm.querySelector('button[type="submit"]');
+                btn.disabled = true;
+                btn.textContent = "送信中...";
+
                 const tag = document.getElementById('postTag').value;
                 const title = document.getElementById('postTitle').value;
                 const author = document.getElementById('postAuthor').value;
@@ -487,20 +535,29 @@
                     String(now.getHours()).padStart(2, '0') + ':' +
                     String(now.getMinutes()).padStart(2, '0');
 
-                const post = { id: Date.now(), tag, title, author, content, date: dateStr, comments: [] };
+                try {
+                    await addDoc(collection(db, "bbs_posts"), {
+                        tag,
+                        title,
+                        author,
+                        content,
+                        date: dateStr,
+                        createdAt: Date.now(),
+                        comments: []
+                    });
 
-                const posts = JSON.parse(localStorage.getItem('bbs_posts')) || [];
-                posts.unshift(post); // 新しい投稿を先頭に追加
-                localStorage.setItem('bbs_posts', JSON.stringify(posts));
-
-                postForm.reset();
-                postModal.classList.remove('show');
-
-                currentPage = 1;
-                loadPosts(searchInput ? searchInput.value.toLowerCase() : '');
+                    postForm.reset();
+                    if (postModal) postModal.classList.remove('show');
+                    currentPage = 1;
+                } catch (error) {
+                    console.error("Error adding document: ", error);
+                    alert("投稿に失敗しました。(設定をご確認ください)");
+                } finally {
+                    btn.disabled = false;
+                    btn.textContent = "投稿する";
+                }
             });
         }
-        
 
         // --- 検索機能 ---
         const searchInput = document.getElementById('searchInput');
@@ -508,8 +565,8 @@
 
         const performSearch = () => {
             if (!searchInput) return;
-            const keyword = searchInput.value.toLowerCase();
-            currentPage = 1; // 検索時は1ページ目に戻す
+            const keyword = searchInput.value;
+            currentPage = 1;
             loadPosts(keyword);
         };
 
@@ -519,9 +576,6 @@
         if (searchBtn) {
             searchBtn.addEventListener('click', performSearch);
         }
-
-        // 初期読み込み
-        loadPosts();
     </script>
 </body>
 
