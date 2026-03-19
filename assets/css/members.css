@@ -96,6 +96,7 @@
 .role-3d { background: linear-gradient(135deg, #cc00ff, #0077ff); }
 .role-member1 { background: linear-gradient(135deg, #ff8c00, #ffeb3b); }
 .role-member2 { background: linear-gradient(135deg, #00d2ff, #0077ff); }
+.role-member3 { background: linear-gradient(135deg, #ffffff, #79c8ea); }
 
 .member-name {
     font-size: 1.6rem;
