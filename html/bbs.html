@@ -79,6 +79,15 @@
                 </div>
             </div>
 
+            <div class="bbs-tabs">
+                <button class="tab-btn active" data-tab="all">すべて</button>
+                <button class="tab-btn" data-tab="important">重要・お知らせ</button>
+                <button class="tab-btn" data-tab="chat">雑談</button>
+                <button class="tab-btn" data-tab="idea">アイデア</button>
+                <button class="tab-btn" data-tab="question">質問</button>
+                <button class="tab-btn" data-tab="report">進捗報告</button>
+            </div>
+
             <div class="bbs-list">
                 <!-- Javascript will load posts here -->
             </div>
@@ -290,15 +299,22 @@
         let currentPage = 1;
         let allPostsFirebase = [];
         let currentSearchKeyword = '';
+        let currentTab = 'all';
 
-        const loadPosts = (filterKeyword = '') => {
+        const loadPosts = (filterKeyword = currentSearchKeyword) => {
             currentSearchKeyword = filterKeyword.toLowerCase();
             if (!bbsList) return;
 
             // フィルタリング
-            const filteredPosts = currentSearchKeyword
-                ? allPostsFirebase.filter(p => (p.title && p.title.toLowerCase().includes(currentSearchKeyword)) || (p.content && p.content.toLowerCase().includes(currentSearchKeyword)))
-                : allPostsFirebase;
+            let filteredPosts = allPostsFirebase;
+            
+            if (currentTab !== 'all') {
+                filteredPosts = filteredPosts.filter(p => p.tag === currentTab);
+            }
+
+            if (currentSearchKeyword) {
+                filteredPosts = filteredPosts.filter(p => (p.title && p.title.toLowerCase().includes(currentSearchKeyword)) || (p.content && p.content.toLowerCase().includes(currentSearchKeyword)));
+            }
 
             const totalPages = Math.ceil(filteredPosts.length / ITEMS_PER_PAGE) || 1;
             if (currentPage > totalPages) currentPage = totalPages;
@@ -622,6 +638,18 @@
                 }
             });
         }
+
+        // --- タブ機能 ---
+        const tabBtns = document.querySelectorAll('.tab-btn');
+        tabBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                tabBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                currentTab = btn.getAttribute('data-tab');
+                currentPage = 1;
+                loadPosts();
+            });
+        });
 
         // --- 検索機能 ---
         const searchInput = document.getElementById('searchInput');
