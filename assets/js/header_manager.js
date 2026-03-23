@@ -69,9 +69,9 @@ class HeaderButton {
 
 // --- 共通ヘッダーボタンの設定 (ここを編集すると全ページに反映されます) ---
 const commonHeaderButtons = [
-    { icon: 'Administrator.webp', x: 640, y: 50, link: './html/settings.html', tooltip: 'サイト設定' },
-    { icon: 'home.webp',          x: 720, y: 30, link: './index.html',         tooltip: 'ホーム' },
-    { icon: 'chatroom.webp',      x: 802, y: 55, link: './html/bbs.html',      tooltip: '掲示板' }
+    { icon: 'Administrator.avif', x: 640, y: 50, link: './html/settings.html', tooltip: 'サイト設定' },
+    { icon: 'home.avif',          x: 720, y: 30, link: './index.html',         tooltip: 'ホーム' },
+    { icon: 'chatroom.avif',      x: 802, y: 55, link: './html/bbs.html',      tooltip: '掲示板' }
 ];
 
 // ボタンの初期化

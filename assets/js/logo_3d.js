@@ -7,7 +7,7 @@
     const container = document.getElementById('logo-3d-container');
     if (!container) return;
 
-    const LOGO_SRC = 'assets/images/y2k_club_logo.webp';
+    const LOGO_SRC = 'assets/images/y2k_club_logo.avif';
     const EXTRUDE_DEPTH = 80;
 
     let scene, camera, renderer, logoMesh;
