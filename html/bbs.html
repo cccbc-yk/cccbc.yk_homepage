@@ -71,22 +71,23 @@
             <h1 class="bbs-title">みんなで作ろう。</h1>
             <p class="bbs-subtitle">コンピュータ同好会 公式掲示板</p>
 
-            <div id="authContainer" class="aero-content-box" style="display: none; flex-direction: column; align-items: center; justify-content: center; padding: 50px 20px; text-align: center; gap: 20px; margin-top: 20px;">
-                <h2>ログインが必要です</h2>
-                <p>同好会メンバー専用の掲示板です。<br>管理者から付与されたアカウントでログインしてください。</p>
-                <div style="display: flex; flex-direction: column; gap: 10px; width: 100%; max-width: 300px;">
-                    <input type="email" id="loginEmail" placeholder="メールアドレス" style="padding: 10px; border-radius: 5px; border: 1px solid #ccc; font-family: inherit;">
-                    <input type="password" id="loginPassword" placeholder="パスワード" style="padding: 10px; border-radius: 5px; border: 1px solid #ccc; font-family: inherit;">
-                    <button id="loginBtn" class="bbs-btn primary-btn" style="font-size: 1.1em; padding: 10px;">ログイン</button>
-                </div>
-                <p id="loginError" style="color: #ff4444; font-size: 0.9em; display: none; margin: 0;"></p>
-            </div>
-
-            <div id="bbsContent" style="display: none;">
-                <div style="text-align: right; margin-bottom: 20px;">
-                    <span id="currentUserDisplay" style="margin-right: 15px; font-weight: bold; font-size: 0.9em; opacity: 0.8;"></span>
+            <div id="authBar" class="aero-content-box" style="margin-bottom: 20px; padding: 15px; display: flex; justify-content: flex-end; align-items: center; gap: 15px;">
+                <!-- ログイン中 -->
+                <div id="loggedInView" style="display: none; align-items: center;">
+                    <span id="currentUserDisplay" style="margin-right: 15px; font-weight: bold; font-size: 0.9em;"></span>
                     <button id="logoutBtn" class="bbs-btn" style="padding: 5px 15px; font-size: 0.8em;">ログアウト</button>
                 </div>
+                <!-- 未ログイン -->
+                <div id="loggedOutView" style="display: flex; align-items: center; gap: 10px;">
+                    <span style="font-size: 0.85em; opacity: 0.8;">投稿・コメントにはログインが必要です</span>
+                    <input type="email" id="loginEmail" placeholder="メール" style="padding: 5px 10px; border-radius: 3px; border: 1px solid #ccc; font-family: inherit; width: 150px; font-size: 0.8em;">
+                    <input type="password" id="loginPassword" placeholder="パスワード" style="padding: 5px 10px; border-radius: 3px; border: 1px solid #ccc; font-family: inherit; width: 120px; font-size: 0.8em;">
+                    <button id="loginBtn" class="bbs-btn primary-btn" style="padding: 5px 15px; font-size: 0.85em;">ログイン</button>
+                    <span id="loginError" style="color: #ff4444; font-size: 0.8em; display: none;"></span>
+                </div>
+            </div>
+
+            <div id="bbsContent">
                 <div class="bbs-actions">
                     <button class="bbs-btn primary-btn">+ 新規投稿</button>
                     <div class="bbs-search">
@@ -257,6 +258,10 @@
 
         if (openModalBtn && postModal) {
             openModalBtn.addEventListener('click', () => {
+                if (!currentUser) {
+                    alert('新規投稿を行うには、右上のフォームからログインしてください。');
+                    return;
+                }
                 postModal.classList.add('show');
             });
         }
@@ -541,56 +546,52 @@
         };
 
         // Firebase リアルタイムデータ取得のセットアップと認証状態の監視
-        let unsubscribePosts = null;
-        if (auth && db && firebaseConfig.apiKey !== "YOUR_API_KEY") {
-            onAuthStateChanged(auth, (user) => {
-                const authContainer = document.getElementById('authContainer');
-                const bbsContent = document.getElementById('bbsContent');
-                const currentUserDisplay = document.getElementById('currentUserDisplay');
-                const postAuthorInput = document.getElementById('postAuthor');
-
-                if (user) {
-                    // ログイン時
-                    currentUser = user;
-                    if(authContainer) authContainer.style.display = 'none';
-                    if(bbsContent) bbsContent.style.display = 'block';
-                    if (currentUserDisplay) {
-                        currentUserDisplay.textContent = `ログイン中: ${user.displayName || user.email}`;
-                    }
-                    // 新規投稿の名前を自動入力（空の場合）
-                    if (postAuthorInput && !postAuthorInput.value) {
-                        postAuthorInput.value = user.displayName || user.email.split('@')[0];
-                    }
-
-                    // データ取得開始
-                    if (!unsubscribePosts) {
-                        const postsCollection = collection(db, "bbs_posts");
-                        const postsQuery = query(postsCollection, orderBy("createdAt", "desc"));
-                        unsubscribePosts = onSnapshot(postsQuery, (snapshot) => {
-                            allPostsFirebase = [];
-                            snapshot.forEach((docSnap) => {
-                                allPostsFirebase.push({ id: docSnap.id, ...docSnap.data() });
-                            });
-                            loadPosts(searchInput ? searchInput.value : '');
-                        }, (error) => {
-                            console.error("Firebase listen error:", error);
-                            if (bbsList) bbsList.innerHTML = `<p style="text-align:center; padding: 20px; color: #ffcccc;">データの読み込みに失敗しました。</p>`;
-                        });
-                    }
-                } else {
-                    // 未ログイン時
-                    currentUser = null;
-                    if(authContainer) authContainer.style.display = 'flex';
-                    if(bbsContent) bbsContent.style.display = 'none';
-                    if (unsubscribePosts) {
-                        unsubscribePosts();
-                        unsubscribePosts = null;
-                    }
-                    allPostsFirebase = [];
-                    // 未ログイン時はリストを空にするか、メッセージを出した方が安全
-                    bbsList.innerHTML = '<p style="text-align:center; padding: 20px;">ログインしてください。</p>';
-                }
+        if (db && firebaseConfig.apiKey !== "YOUR_API_KEY") {
+            // 閲覧は全ユーザー可能なので常にデータ取得
+            const postsCollection = collection(db, "bbs_posts");
+            const postsQuery = query(postsCollection, orderBy("createdAt", "desc"));
+            onSnapshot(postsQuery, (snapshot) => {
+                allPostsFirebase = [];
+                snapshot.forEach((docSnap) => {
+                    allPostsFirebase.push({ id: docSnap.id, ...docSnap.data() });
+                });
+                loadPosts(searchInput ? searchInput.value : '');
+            }, (error) => {
+                console.error("Firebase listen error:", error);
+                if (bbsList) bbsList.innerHTML = `<p style="text-align:center; padding: 20px; color: #ffcccc;">データの読み込みに失敗しました。</p>`;
             });
+
+            if (auth) {
+                onAuthStateChanged(auth, (user) => {
+                    const loggedInView = document.getElementById('loggedInView');
+                    const loggedOutView = document.getElementById('loggedOutView');
+                    const currentUserDisplay = document.getElementById('currentUserDisplay');
+                    const postAuthorInput = document.getElementById('postAuthor');
+
+                    if (user) {
+                        // ログイン時
+                        currentUser = user;
+                        if(loggedInView) loggedInView.style.display = 'flex';
+                        if(loggedOutView) loggedOutView.style.display = 'none';
+                        if (currentUserDisplay) {
+                            currentUserDisplay.textContent = `ログイン中: ${user.displayName || user.email}`;
+                        }
+                        if (postAuthorInput && !postAuthorInput.value) {
+                            postAuthorInput.value = user.displayName || user.email.split('@')[0];
+                        }
+                        const loginError = document.getElementById('loginError');
+                        if (loginError) loginError.style.display = 'none';
+                    } else {
+                        // 未ログイン時
+                        currentUser = null;
+                        if(loggedInView) loggedInView.style.display = 'none';
+                        if(loggedOutView) loggedOutView.style.display = 'flex';
+                        if (postAuthorInput) {
+                            postAuthorInput.value = '';
+                        }
+                    }
+                });
+            }
 
             // ログイン・ログアウトボタンの処理
             const loginBtn = document.getElementById('loginBtn');
@@ -646,6 +647,10 @@
         // コメント送信処理 (HTMLからの呼び出し用にwindowに用意)
         window.submitComment = async (e, postId) => {
             e.preventDefault();
+            if (!currentUser) {
+                alert('コメントを送信するには右上のフォームからログインしてください。');
+                return;
+            }
             if (!db || firebaseConfig.apiKey === "YOUR_API_KEY") {
                 alert("Firebaseの設定が完了していません。投稿機能は無効になっています。");
                 return;
@@ -694,6 +699,10 @@
         if (postForm) {
             postForm.addEventListener('submit', async (e) => {
                 e.preventDefault();
+                if (!currentUser) {
+                    alert('投稿するには右上のフォームからログインしてください。');
+                    return;
+                }
                 if (!db || firebaseConfig.apiKey === "YOUR_API_KEY") {
                     alert("Firebaseの設定が完了していません。投稿機能は無効になっています。");
                     return;
