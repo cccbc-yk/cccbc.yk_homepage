@@ -48,18 +48,27 @@ body {
     font-family: "Hind", "M PLUS Rounded 1c", sans-serif;
     color: #333;
     overflow-x: hidden;
-    /* 枠に合わせて1500px幅に固定したWindows XP Bliss */
-    background-color: #000;
     /* 枠の外は完全な黒 */
+    background-color: #000;
+}
+
+/* 背景を固定するための擬似要素 (スマホでも安定させるため) */
+body::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
     background-image: url("../images/Bliss_(Windows_XP).avif");
     background-size: 1500px auto;
-    background-position: center bottom;
-    background-attachment: fixed;
+    background-position: center top; /* 上基準に変更 */
     background-repeat: no-repeat;
+    z-index: -2;
 }
 
 /* 背景が明るい画像の場合に備え、オーバーレイで可読性を確保 */
-body::before {
+body::after {
     content: "";
     position: fixed;
     top: 0;
@@ -68,7 +77,16 @@ body::before {
     height: 100%;
     background: rgba(255, 255, 255, 0.1);
     backdrop-filter: saturate(1.2);
+    -webkit-backdrop-filter: saturate(1.2);
     z-index: -1;
+    pointer-events: none;
+}
+
+/* スマホ対応: 画面幅が狭い場合は画像をカバーにする */
+@media (max-width: 1500px) {
+    body::before {
+        background-size: cover;
+    }
 }
 
 /* --- Floating Menu Bar Style (Responsive) --- */
@@ -81,7 +99,7 @@ body::before {
     display: flex;
     justify-content: center;
     z-index: 1;
-    filter: drop-shadow(0 15px 40px rgba(0, 50, 100, 0.25));
+    /* 影は個別のラッパー側に持たせる (スケーリングに追従させるため) */
 }
 
 #canvas-wrap {
@@ -93,6 +111,39 @@ body::before {
     display: flex;
     justify-content: center;
     align-items: center;
+    transition: transform 0.3s ease;
+    filter: drop-shadow(0 15px 40px rgba(0, 50, 100, 0.25));
+}
+
+/* 画面幅が1500px未満の場合、ヘッダー全体をレスポンシブに縮小 */
+@media (max-width: 1500px) {
+    #header-container {
+        height: calc(120px * (100vw / 1500));
+    }
+    #canvas-wrap {
+        transform: scale(calc(100vw / 1500));
+        transform-origin: center top;
+    }
+    #header-earth-part {
+        transform: scale(calc(100vw / 1500));
+        transform-origin: left top;
+    }
+}
+
+/* スマホ対応: 特に中心の540pxを目立たせる (375px幅で540px分を表示) */
+@media (max-width: 540px) {
+    #header-container {
+        height: calc(120px * (100vw / 540));
+    }
+    #canvas-wrap {
+        transform: scale(calc(100vw / 540));
+        transform-origin: center top;
+    }
+    #header-earth-part {
+        left: 70vw; /* 右端で見切れないように少し中央寄りに寄せ直す */
+        transform: scale(calc(100vw / 540));
+        transform-origin: left top;
+    }
 }
 
 /* --- ヘッダー専用のパーツ画像 --- */
@@ -859,6 +910,10 @@ h1 {
 html.theme-dark body {
     background: #121212 !important;
 }
+html.theme-dark body::before,
+html.theme-dark body::after {
+    display: none !important;
+}
 html.theme-dark .hero-section::before {
     opacity: 0.1 !important;
 }
@@ -889,6 +944,10 @@ html.theme-hacker body {
     background: #000 !important;
     color: #0f0 !important;
     font-family: "Courier New", Courier, monospace !important;
+}
+html.theme-hacker body::before,
+html.theme-hacker body::after {
+    display: none !important;
 }
 html.theme-hacker .hero-section::before {
     display: none !important;
