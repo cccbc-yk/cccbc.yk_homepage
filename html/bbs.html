@@ -71,19 +71,21 @@
             <h1 class="bbs-title">みんなで作ろう。</h1>
             <p class="bbs-subtitle">コンピュータ同好会 公式掲示板</p>
 
-            <div id="authBar" class="aero-content-box" style="margin-bottom: 20px; padding: 15px; display: flex; justify-content: flex-end; align-items: center; gap: 15px;">
+            <div id="authBar" class="aero-content-box auth-bar">
                 <!-- ログイン中 -->
-                <div id="loggedInView" style="display: none; align-items: center;">
-                    <span id="currentUserDisplay" style="margin-right: 15px; font-weight: bold; font-size: 0.9em;"></span>
-                    <button id="logoutBtn" class="bbs-btn" style="padding: 5px 15px; font-size: 0.8em;">ログアウト</button>
+                <div id="loggedInView" class="logged-in-view" style="display: none;">
+                    <span id="currentUserDisplay" class="user-display"></span>
+                    <button id="logoutBtn" class="bbs-btn auth-btn logout-btn">ログアウト</button>
                 </div>
                 <!-- 未ログイン -->
-                <div id="loggedOutView" style="display: flex; align-items: center; gap: 10px;">
-                    <span style="font-size: 0.85em; opacity: 0.8;">投稿・コメントにはログインが必要です</span>
-                    <input type="email" id="loginEmail" placeholder="メール" style="padding: 5px 10px; border-radius: 3px; border: 1px solid #ccc; font-family: inherit; width: 150px; font-size: 0.8em;">
-                    <input type="password" id="loginPassword" placeholder="パスワード" style="padding: 5px 10px; border-radius: 3px; border: 1px solid #ccc; font-family: inherit; width: 120px; font-size: 0.8em;">
-                    <button id="loginBtn" class="bbs-btn primary-btn" style="padding: 5px 15px; font-size: 0.85em;">ログイン</button>
-                    <span id="loginError" style="color: #ff4444; font-size: 0.8em; display: none;"></span>
+                <div id="loggedOutView" class="logged-out-view" style="display: flex;">
+                    <span class="auth-message">投稿・コメントにはログインが必要です</span>
+                    <div class="auth-input-group">
+                        <input type="email" id="loginEmail" placeholder="メール" class="auth-input">
+                        <input type="password" id="loginPassword" placeholder="パスワード" class="auth-input">
+                    </div>
+                    <button id="loginBtn" class="bbs-btn primary-btn auth-btn">ログイン</button>
+                    <span id="loginError" class="auth-error"></span>
                 </div>
             </div>
 
