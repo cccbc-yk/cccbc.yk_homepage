@@ -130,18 +130,18 @@ body::after {
     }
 }
 
-/* スマホ対応: 特に中心の540pxを目立たせる (375px幅で540px分を表示) */
-@media (max-width: 540px) {
+/* スマホ対応: 全体的にヘッダーを小さく表示するため、仮想幅を750pxに変更 */
+@media (max-width: 600px) {
     #header-container {
-        height: calc(120px * (100vw / 540));
+        height: calc(120px * (100vw / 750));
     }
     #canvas-wrap {
-        transform: scale(calc(100vw / 540));
+        transform: scale(calc(100vw / 750));
         transform-origin: center top;
     }
     #header-earth-part {
-        left: 70vw; /* 右端で見切れないように少し中央寄りに寄せ直す */
-        transform: scale(calc(100vw / 540));
+        left: 76vw; /* 右端で見切れないように調整 */
+        transform: scale(calc(100vw / 750));
         transform-origin: left top;
     }
 }
