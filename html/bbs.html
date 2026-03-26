@@ -79,7 +79,7 @@
                 </div>
                 <!-- 未ログイン -->
                 <div id="loggedOutView" class="logged-out-view" style="display: flex;">
-                    <span class="auth-message">投稿・コメントにはログインが必要です</span>
+                    <span id="authMessage" class="auth-message">投稿・コメントにはログインが必要です</span>
                     <div class="auth-input-group">
                         <input type="email" id="loginEmail" placeholder="メール" class="auth-input">
                         <input type="password" id="loginPassword" placeholder="パスワード" class="auth-input">
@@ -251,6 +251,15 @@
             };
         }
 
+        // --- 設定に応じた表示の更新 ---
+        const requireLoginInit = localStorage.getItem('bbs_login_required') === 'true';
+        const authMsg = document.getElementById('authMessage');
+        if (authMsg) {
+            authMsg.textContent = requireLoginInit 
+                ? "投稿・コメントにはログインが必要です" 
+                : "任意でログインが可能です（未ログインで投稿可能）";
+        }
+
         // --- 新規投稿機能 ---
         const postModal = document.getElementById('postModal');
         const openModalBtn = document.querySelector('.bbs-btn.primary-btn');
@@ -260,7 +269,8 @@
 
         if (openModalBtn && postModal) {
             openModalBtn.addEventListener('click', () => {
-                if (!currentUser) {
+                const requireLogin = localStorage.getItem('bbs_login_required') === 'true';
+                if (requireLogin && !currentUser) {
                     alert('新規投稿を行うには、右上のフォームからログインしてください。');
                     return;
                 }
@@ -649,7 +659,8 @@
         // コメント送信処理 (HTMLからの呼び出し用にwindowに用意)
         window.submitComment = async (e, postId) => {
             e.preventDefault();
-            if (!currentUser) {
+            const requireLogin = localStorage.getItem('bbs_login_required') === 'true';
+            if (requireLogin && !currentUser) {
                 alert('コメントを送信するには右上のフォームからログインしてください。');
                 return;
             }
@@ -701,7 +712,8 @@
         if (postForm) {
             postForm.addEventListener('submit', async (e) => {
                 e.preventDefault();
-                if (!currentUser) {
+                const requireLogin = localStorage.getItem('bbs_login_required') === 'true';
+                if (requireLogin && !currentUser) {
                     alert('投稿するには右上のフォームからログインしてください。');
                     return;
                 }

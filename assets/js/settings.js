@@ -49,6 +49,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const fontSizeValue = document.getElementById('fontSizeValue');
     const disable3dCheck = document.getElementById('disable3dCheck');
     const cursorSelect = document.getElementById('cursorSelect');
+    const bbsLoginCheck = document.getElementById('bbsLoginCheck');
     
     // Load current values
     function loadSettings() {
@@ -57,6 +58,9 @@ document.addEventListener('DOMContentLoaded', () => {
         fontSizeValue.textContent = `${fontSizeRange.value}%`;
         disable3dCheck.checked = localStorage.getItem('site_disable_3d') === 'true';
         cursorSelect.value = localStorage.getItem('site_cursor') || 'default';
+        if (bbsLoginCheck) {
+            bbsLoginCheck.checked = localStorage.getItem('bbs_login_required') === 'true';
+        }
 
         // Set developer info
         document.getElementById('devUserAgent').textContent = navigator.userAgent;
@@ -116,6 +120,12 @@ document.addEventListener('DOMContentLoaded', () => {
             if(style) style.remove();
         }
     });
+
+    if (bbsLoginCheck) {
+        bbsLoginCheck.addEventListener('change', (e) => {
+            localStorage.setItem('bbs_login_required', e.target.checked);
+        });
+    }
 
     // Clear Data
     document.getElementById('clearDataBtn').addEventListener('click', () => {
